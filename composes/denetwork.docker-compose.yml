@@ -5,8 +5,6 @@ services:
         # Email:    admin@example.com
         # Password: changeme
         image: jc21/nginx-proxy-manager:latest
-        networks:
-            - denetwork
         ports:
             - "80:80" # Public HTTP Port
             - "443:443" # Public HTTPS Port
@@ -24,8 +22,6 @@ services:
 
     homarr:
         image: ghcr.io/homarr-labs/homarr:latest
-        networks:
-            - denetwork
         # ports:
         # - '7575:7575' # Web Interface
         volumes:
@@ -35,8 +31,6 @@ services:
 
     watchtower:
         image: containrrr/watchtower
-        networks:
-            - denetwork
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
         environment:
@@ -85,11 +79,10 @@ services:
         sysctls:
             - net.ipv4.ip_forward=1
             - net.ipv4.conf.all.src_valid_mark=1
-        networks:
-            - denetwork
 
 networks:
-    denetwork:
+    default:
+        name: denetwork
         external: true
 
 volumes:

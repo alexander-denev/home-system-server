@@ -2,8 +2,6 @@ name: nextcloud
 services:
     nextcloud-aio-mastercontainer:
         image: nextcloud/all-in-one:latest
-        networks:
-            - denetwork
         init: true
         restart: unless-stopped
         container_name: nextcloud-aio-mastercontainer # This line is not allowed to be changed as otherwise AIO will not work correctly
@@ -52,7 +50,8 @@ services:
     #   network_mode: "host"
 
 networks:
-    denetwork:
+    default:
+        name: denetwork
         external: true
 
 volumes: # If you want to store the data on a different drive, see https://github.com/nextcloud/all-in-one#how-to-store-the-filesinstallation-on-a-separate-drive
