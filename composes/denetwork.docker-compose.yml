@@ -96,8 +96,4 @@ volumes:
     proxyman_data:
     letsencrypt:
 
-    homarr_configs:
-    homarr_icons:
-    homarr_data:
-
     etc_wireguard:
