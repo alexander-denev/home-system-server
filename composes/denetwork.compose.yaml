@@ -23,16 +23,14 @@ services:
             start_period: 30s
 
     homarr:
-        image: ghcr.io/ajnart/homarr:latest
+        image: ghcr.io/homarr-labs/homarr:latest
         networks:
             - denetwork
         # ports:
         # - '7575:7575' # Web Interface
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
-            - homarr_configs:/app/data/configs
-            - homarr_icons:/app/public/icons
-            - homarr_data:/data
+            - ../config/homarr:/appdata
         restart: unless-stopped
 
     watchtower:
