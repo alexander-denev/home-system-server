@@ -22,30 +22,6 @@ services:
             retries: 3
             start_period: 30s
 
-    pihole:
-        image: pihole/pihole:latest
-        networks:
-            - denetwork
-        # ports: # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
-        #     - "53:53/tcp" # DNS
-        #     - "53:53/udp" # DNS
-        #     - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-        #     - "80:80/tcp" # Web Interface
-        network_mode: "host"
-        environment:
-            TZ: "Europe/Sofia"
-            WEBPASSWORD: 7T7A74Mn
-            FTLCONF_LOCAL_IPV4: 192.168.0.2
-        restart: unless-stopped
-        volumes:
-            - etc-pihole:/etc/pihole
-            - etc-dnsmasq.d:/etc/dnsmasq.d
-        cap_add:
-            - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
-        dns:
-            - 127.0.0.1
-            - 1.1.1.1
-
     homarr:
         image: ghcr.io/ajnart/homarr:latest
         networks:
@@ -121,9 +97,6 @@ networks:
 volumes:
     proxyman_data:
     letsencrypt:
-
-    etc-pihole:
-    etc-dnsmasq.d:
 
     homarr_configs:
     homarr_icons:
