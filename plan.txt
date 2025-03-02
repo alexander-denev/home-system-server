@@ -1,0 +1,26 @@
+===denetwork===
+portainer
+nginx-proxy-manager
+pi-hole
+vpn
+dashy
+======
+
+===arr-stack===
+    trash-guides.com/org
+jellyfin
+jellyseerr
+radarr
+sonarr
+*readarr
+prowlarr
+*sabnzbd
+qbittorrent
+bazarr
+servarr
+[all in one "arr" docker setup]
+======
+
+===nextcloud===
+nextcloud
+======

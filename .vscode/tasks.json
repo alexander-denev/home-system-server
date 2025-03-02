@@ -1,0 +1,27 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "compose up",
+            "type": "shell",
+            "command": "docker compose -f \"${file}\" up -d"
+        },
+        {
+            "label": "compose down",
+            "type": "shell",
+            "command": "docker compose -f \"${file}\" down"
+        },
+        {
+            "label": "compose redo",
+            "type": "shell",
+            "command": "docker compose -f \"${file}\" down && docker compose -f \"${file}\" -d"
+        },
+        {
+            "label":"test file",
+            "type":"shell",
+            "command":"echo \"${file}\""
+        }
+    ]
+}
