@@ -33,12 +33,10 @@ services:
         image: containrrr/watchtower
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-        environment:
-            - WATCHTOWER_SCHEDULE=0 0 4 * * *
+        env_file: .env.watchtower
         restart: unless-stopped
 
     wireguard:
-        env_file: wireguard.env
         image: ghcr.io/wg-easy/wg-easy
         volumes:
             - etc_wireguard:/etc/wireguard
@@ -46,6 +44,7 @@ services:
             - "51820:51820/udp"
             # - "51821:51821/tcp"
             # - "80:80" # Web interface
+        env_file: .env.wireguard
         restart: unless-stopped
         cap_add:
             - NET_ADMIN
