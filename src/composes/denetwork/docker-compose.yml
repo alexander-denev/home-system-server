@@ -23,7 +23,7 @@ services:
     homarr:
         image: ghcr.io/homarr-labs/homarr:latest
         # ports:
-        # - '7575:7575' # Web Interface
+            # - '7575:7575' # Web Interface
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
             - homarr_data:/appdata
@@ -45,11 +45,12 @@ services:
         ports:
             - "51820:51820/udp"
             # - "51821:51821/tcp"
+            # - "80:80" # Web interface
         restart: unless-stopped
         cap_add:
             - NET_ADMIN
             - SYS_MODULE
-        # - NET_RAW # ⚠️ Uncomment if using Podman
+            # - NET_RAW # ⚠️ Uncomment if using Podman
         sysctls:
             - net.ipv4.ip_forward=1
             - net.ipv4.conf.all.src_valid_mark=1
