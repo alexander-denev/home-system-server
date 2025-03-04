@@ -3,7 +3,6 @@ services:
     nextcloud:
         image: nextcloud
         restart: unless-stopped
-        hostname: nextcloud
         volumes:
             - nextcloud_data:/var/www/html
         # ports:
