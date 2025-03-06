@@ -18,6 +18,7 @@ prowlarr - torrent finder
 qbittorrent - torrent downloader
 bazarr - subtitles
 servarr - (documentation) sonarr, radarr, readarr and others
+tdarr - transcoding
 [all in one "arr" docker setup]
 ======
 
