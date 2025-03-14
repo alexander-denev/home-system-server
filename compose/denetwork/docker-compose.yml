@@ -11,8 +11,8 @@ services:
             - "8080:81" # Admin Web Interface Port
         restart: unless-stopped
         volumes:
-            - proxyman_data:/data
-            - proxyman_letsencrypt:/etc/letsencrypt
+            - ../../config/denetwork/proxyman/data:/data
+            - ../../config/denetwork/proxyman/letsencrypt:/etc/letsencrypt
         healthcheck:
             test: ["CMD", "/usr/bin/check-health"]
             interval: 60s
@@ -26,7 +26,7 @@ services:
             # - '7575:7575' # Web Interface
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
-            - homarr_data:/appdata
+            - ../../config/denetwork/homarr:/appdata
         restart: unless-stopped
 
     watchtower:
@@ -38,13 +38,16 @@ services:
 
     cronman:
         image: alseambusher/crontab-ui
+        # volumes:
+        #     - ../../config:/app/config # Optional, only if you want to backup using cronman
+        #     - /mnt/bigdisk:/app/backup # Optional, only if you want to backup using cronman
         # ports:
         # - 8000:8000 # Web Interface
 
     wireguard:
         image: ghcr.io/wg-easy/wg-easy
         volumes:
-            - etc_wireguard:/etc/wireguard
+            - ../../config/denetwork/wireguard:/etc/wireguard
         ports:
             - "51820:51820/udp"
             # - "51821:51821/tcp"
@@ -63,11 +66,3 @@ networks:
     default:
         name: denetwork
         external: true
-
-volumes:
-    proxyman_data:
-    proxyman_letsencrypt:
-
-    homarr_data:
-
-    etc_wireguard:
