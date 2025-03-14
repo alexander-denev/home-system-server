@@ -12,7 +12,7 @@ services:
 
     portainer_agent:
         container_name: portainer_agent
-        image: portainer/agent:2.19.5
+        image: portainer/agent:latest
         # ports:
         #     - 9001:9001 # Communication Port
         restart: unless-stopped
