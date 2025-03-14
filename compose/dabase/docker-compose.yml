@@ -23,7 +23,7 @@ services:
     homarr:
         image: ghcr.io/homarr-labs/homarr:latest
         # ports:
-        # - '7575:7575' # Web Interface
+            # - '7575:7575' # Web Interface
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
             - ../../config/dabase/homarr:/appdata
@@ -42,7 +42,7 @@ services:
         #     - ../../config:/app/config # Optional, only if you want to backup using cronman
         #     - /mnt/bigdisk:/app/backup # Optional, only if you want to backup using cronman
         # ports:
-        # - 8000:8000 # Web Interface
+            # - 8000:8000 # Web Interface
 
     wireguard:
         image: ghcr.io/wg-easy/wg-easy
