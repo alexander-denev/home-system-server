@@ -33,10 +33,10 @@ services:
         image: containrrr/watchtower
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-        env_file: .env.watchtower
+        env_file: ./watchtower/.env
         restart: unless-stopped
 
-    cron:
+    cronman:
         image: alseambusher/crontab-ui
         # ports:
         # - 8000:8000 # Web Interface
@@ -49,7 +49,7 @@ services:
             - "51820:51820/udp"
             # - "51821:51821/tcp"
             # - "80:80" # Web interface
-        env_file: .env.wireguard
+        env_file: ./wireguard/.env
         restart: unless-stopped
         cap_add:
             - NET_ADMIN
