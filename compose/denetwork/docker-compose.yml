@@ -1,4 +1,4 @@
-name: denetwork
+name: dabase
 services:
     proxyman:
         # Default login details:
@@ -11,8 +11,8 @@ services:
             - "8080:81" # Admin Web Interface Port
         restart: unless-stopped
         volumes:
-            - ../../config/denetwork/proxyman/data:/data
-            - ../../config/denetwork/proxyman/letsencrypt:/etc/letsencrypt
+            - ../../config/dabase/proxyman/data:/data
+            - ../../config/dabase/proxyman/letsencrypt:/etc/letsencrypt
         healthcheck:
             test: ["CMD", "/usr/bin/check-health"]
             interval: 60s
@@ -23,10 +23,10 @@ services:
     homarr:
         image: ghcr.io/homarr-labs/homarr:latest
         # ports:
-            # - '7575:7575' # Web Interface
+        # - '7575:7575' # Web Interface
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
-            - ../../config/denetwork/homarr:/appdata
+            - ../../config/dabase/homarr:/appdata
         restart: unless-stopped
 
     watchtower:
@@ -47,7 +47,7 @@ services:
     wireguard:
         image: ghcr.io/wg-easy/wg-easy
         volumes:
-            - ../../config/denetwork/wireguard:/etc/wireguard
+            - ../../config/dabase/wireguard:/etc/wireguard
         ports:
             - "51820:51820/udp"
             # - "51821:51821/tcp"
@@ -64,5 +64,5 @@ services:
 
 networks:
     default:
-        name: denetwork
+        name: dabase
         external: true

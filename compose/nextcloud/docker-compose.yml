@@ -10,7 +10,7 @@ services:
 
 networks:
     default:
-        name: denetwork
+        name: dabase
         external: true
 
 volumes:
