@@ -36,6 +36,11 @@ services:
         env_file: .env.watchtower
         restart: unless-stopped
 
+    cron:
+        image: alseambusher/crontab-ui
+        # ports:
+        # - 8000:8000 # Web Interface
+
     wireguard:
         image: ghcr.io/wg-easy/wg-easy
         volumes:
