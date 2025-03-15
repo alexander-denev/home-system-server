@@ -53,8 +53,8 @@ services:
         image: alseambusher/crontab-ui
         volumes:
             - ./config/dabase/cronman:/crontab-ui/crontabs
-            - ./config:/app/config # Optional, only if you want to backup using cronman
-            - ${BIGFILES_MOUNTPOINT}:/app/backup # Optional, only if you want to backup using cronman
+            - ./config:/app/config # For backup
+            - ${BIGFILES_MOUNTPOINT}/config_backup:/app/backup # For backup
         # ports:
             # - 8000:8000 # Web Interface
 
