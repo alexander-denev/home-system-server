@@ -148,7 +148,7 @@ services:
         restart: unless-stopped
 
     readarr:
-        image: linuxserver/readarr:latest
+        image: linuxserver/readarr:develop
         volumes:
             - ./config/arrstack/readarr:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack:/data
