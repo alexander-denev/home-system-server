@@ -98,6 +98,16 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
             - ./config/dabeis/portainer:/data
 
+    portainer_agent:
+        # We run a portainer agent due to the fact, that portainer alone cannot browse volumes. This is a workaround.
+        image: portainer/agent:latest
+        # ports:
+        #     - 9001:9001 # Communication Port
+        restart: unless-stopped
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /var/lib/docker/volumes:/var/lib/docker/volumes
+
     # ███╗░░██╗███████╗██╗░░██╗████████╗░█████╗░██╗░░░░░░█████╗░██╗░░░██╗██████╗░
     # ████╗░██║██╔════╝╚██╗██╔╝╚══██╔══╝██╔══██╗██║░░░░░██╔══██╗██║░░░██║██╔══██╗
     # ██╔██╗██║█████╗░░░╚███╔╝░░░░██║░░░██║░░╚═╝██║░░░░░██║░░██║██║░░░██║██║░░██║
