@@ -52,7 +52,7 @@ services:
     cronman:
         image: alseambusher/crontab-ui
         volumes:
-            - ./config/dabase/cronman:/contab-ui
+            - ./config/dabase/cronman:/crontab-ui/crontabs
             - ./config:/app/config # Optional, only if you want to backup using cronman
             - ${BIGFILES_MOUNTPOINT}:/app/backup # Optional, only if you want to backup using cronman
         # ports:
@@ -122,7 +122,7 @@ services:
         volumes:
             - ./config/nextcloud/config:/var/www/html/config
             - ./config/nextcloud/custom_apps:/var/www/html/custom_apps
-            - ./config/nextcloud/theme:/var/www/html/theme
+            - ./config/nextcloud/theme:/var/www/html/themes
             - ${BIGFILES_MOUNTPOINT}/nextcloud:/var/www/html/data
         # ports:
         #     - 80:80 # Web interface
