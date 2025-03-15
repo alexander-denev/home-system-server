@@ -181,18 +181,17 @@ services:
             - ./config/arrstack/jellyseerr:/app/config
         restart: unless-stopped
 
-    qbittorrent:
-        image: linuxserver/qbittorrent:latest
-        restart: unless-stopped
+    deluge:
+        image: lscr.io/linuxserver/deluge:latest
+        environment:
+            - PUID=1000
+            - PGID=1000
         volumes:
-            - ./config/arrstack/qbittorrent/config:/config
+            - .config/arrstack/deluge:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/torrent:/downloads
         # ports:
-            # - 8080:8080 # Web interface
-            # - 6881:6881/tcp # Torrenting port
-            # - 6881:6881/udp # Torrenting port
-        environment:
-            - WEBUI_PORT=8080
-            - TORRENTING_PORT=6881
-        healthcheck:
-            start_period: 15s
+        #     - 8112:8112 # Web interface
+        #     - 6881:6881 # Torrent port
+        #     - 6881:6881/udp # Torrent port
+        #     - 58846:58846 # Thin client connectivity
+        restart: unless-stopped
