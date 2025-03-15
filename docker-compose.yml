@@ -48,15 +48,6 @@ services:
         environment:
             - WATCHTOWER_SCHEDULE=0 0 4 * * * # Run every day at 4am
 
-    cronman:
-        image: alseambusher/crontab-ui
-        volumes:
-            - ./config/dabase/cronman:/crontab-ui/crontabs
-            - ./config:/app/config # For backup
-            - ${BIGFILES_MOUNTPOINT}/config_backup:/app/backup # For backup
-        # ports:
-        # - 8000:8000 # Web Interface
-
     wireguard:
         image: ghcr.io/wg-easy/wg-easy
         volumes:
