@@ -120,16 +120,19 @@ services:
         image: nextcloud:latest
         restart: unless-stopped
         volumes:
-            - ${BIGFILES_MOUNTPOINT}:/var/www/html
+            - ./config/nextcloud/config:/var/www/html/config
+            - ./config/nextcloud/custom_apps:/var/www/html/custom_apps
+            - ./config/nextcloud/theme:/var/www/html/theme
+            - ${BIGFILES_MOUNTPOINT}/nextcloud:/var/www/html/data
         # ports:
         #     - 80:80 # Web interface
 
-# ░█████╗░██████╗░██████╗░░░░░░░░██████╗████████╗░█████╗░░█████╗░██╗░░██╗
-# ██╔══██╗██╔══██╗██╔══██╗░░░░░░██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║░██╔╝
-# ███████║██████╔╝██████╔╝█████╗╚█████╗░░░░██║░░░███████║██║░░╚═╝█████═╝░
-# ██╔══██║██╔══██╗██╔══██╗╚════╝░╚═══██╗░░░██║░░░██╔══██║██║░░██╗██╔═██╗░
-# ██║░░██║██║░░██║██║░░██║░░░░░░██████╔╝░░░██║░░░██║░░██║╚█████╔╝██║░╚██╗
-# ╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░░░░░░╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝
+# ░█████╗░██████╗░██████╗░░██████╗████████╗░█████╗░░█████╗░██╗░░██╗
+# ██╔══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║░██╔╝
+# ███████║██████╔╝██████╔╝╚█████╗░░░░██║░░░███████║██║░░╚═╝█████═╝░
+# ██╔══██║██╔══██╗██╔══██╗░╚═══██╗░░░██║░░░██╔══██║██║░░██╗██╔═██╗░
+# ██║░░██║██║░░██║██║░░██║██████╔╝░░░██║░░░██║░░██║╚█████╔╝██║░╚██╗
+# ╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝
     prowlarr:
         image: linuxserver/prowlarr:latest
         volumes:
@@ -162,16 +165,6 @@ services:
         #     - 7878:7878
         restart: unless-stopped
                                                 
-    lidarr:
-        image: linuxserver/lidarr:latest
-        volumes:
-            - ${ARRPATH}Lidarr/config:/config
-            - ${ARRPATH}Lidarr/music:/data/musicfolder
-            - ${ARRPATH}Downloads:/downloads
-        # ports:
-        #     - 8686:8686
-        restart: unless-stopped
-
     readarr:
         image: linuxserver/readarr:develop
         volumes:
