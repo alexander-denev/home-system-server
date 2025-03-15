@@ -5,13 +5,12 @@ networks:
         name: home-system-server
 
 services:
-
-# ██████╗░░█████╗░██████╗░░█████╗░░██████╗███████╗
-# ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝
-# ██║░░██║███████║██████╦╝███████║╚█████╗░█████╗░░
-# ██║░░██║██╔══██║██╔══██╗██╔══██║░╚═══██╗██╔══╝░░
-# ██████╔╝██║░░██║██████╦╝██║░░██║██████╔╝███████╗
-# ╚═════╝░╚═╝░░╚═╝╚═════╝░╚═╝░░╚═╝╚═════╝░╚══════╝
+    # ██████╗░░█████╗░██████╗░░█████╗░░██████╗███████╗
+    # ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝
+    # ██║░░██║███████║██████╦╝███████║╚█████╗░█████╗░░
+    # ██║░░██║██╔══██║██╔══██╗██╔══██║░╚═══██╗██╔══╝░░
+    # ██████╔╝██║░░██║██████╦╝██║░░██║██████╔╝███████╗
+    # ╚═════╝░╚═╝░░╚═╝╚═════╝░╚═╝░░╚═╝╚═════╝░╚══════╝
     proxyman:
         # Default login details:
         # Email:    admin@example.com
@@ -35,7 +34,7 @@ services:
     homarr:
         image: ghcr.io/homarr-labs/homarr:latest
         # ports:
-            # - '7575:7575' # Web Interface
+        # - '7575:7575' # Web Interface
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
             - ./config/dabase/homarr:/appdata
@@ -56,7 +55,7 @@ services:
             - ./config:/app/config # For backup
             - ${BIGFILES_MOUNTPOINT}/config_backup:/app/backup # For backup
         # ports:
-            # - 8000:8000 # Web Interface
+        # - 8000:8000 # Web Interface
 
     wireguard:
         image: ghcr.io/wg-easy/wg-easy
@@ -97,7 +96,7 @@ services:
             # - WG_PRE_DOWN=echo "Pre Down" > /etc/wireguard/pre-down.txt
             # - WG_POST_DOWN=echo "Post Down" > /etc/wireguard/post-down.txt
             # - UI_TRAFFIC_STATS=true
-            # - UI_CHART_TYPE=0 # (0 Charts disabled, 1 # Line chart, 2 # Area chart, 3 # Bar chart)            
+            # - UI_CHART_TYPE=0 # (0 Charts disabled, 1 # Line chart, 2 # Area chart, 3 # Bar chart)
 
     portainer:
         image: portainer/portainer-ce:latest
@@ -108,13 +107,12 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
             - ./config/dabase/portainer:/data
 
-
-# ███╗░░██╗███████╗██╗░░██╗████████╗░█████╗░██╗░░░░░░█████╗░██╗░░░██╗██████╗░
-# ████╗░██║██╔════╝╚██╗██╔╝╚══██╔══╝██╔══██╗██║░░░░░██╔══██╗██║░░░██║██╔══██╗
-# ██╔██╗██║█████╗░░░╚███╔╝░░░░██║░░░██║░░╚═╝██║░░░░░██║░░██║██║░░░██║██║░░██║
-# ██║╚████║██╔══╝░░░██╔██╗░░░░██║░░░██║░░██╗██║░░░░░██║░░██║██║░░░██║██║░░██║
-# ██║░╚███║███████╗██╔╝╚██╗░░░██║░░░╚█████╔╝███████╗╚█████╔╝╚██████╔╝██████╔╝
-# ╚═╝░░╚══╝╚══════╝╚═╝░░╚═╝░░░╚═╝░░░░╚════╝░╚══════╝░╚════╝░░╚═════╝░╚═════╝░
+    # ███╗░░██╗███████╗██╗░░██╗████████╗░█████╗░██╗░░░░░░█████╗░██╗░░░██╗██████╗░
+    # ████╗░██║██╔════╝╚██╗██╔╝╚══██╔══╝██╔══██╗██║░░░░░██╔══██╗██║░░░██║██╔══██╗
+    # ██╔██╗██║█████╗░░░╚███╔╝░░░░██║░░░██║░░╚═╝██║░░░░░██║░░██║██║░░░██║██║░░██║
+    # ██║╚████║██╔══╝░░░██╔██╗░░░░██║░░░██║░░██╗██║░░░░░██║░░██║██║░░░██║██║░░██║
+    # ██║░╚███║███████╗██╔╝╚██╗░░░██║░░░╚█████╔╝███████╗╚█████╔╝╚██████╔╝██████╔╝
+    # ╚═╝░░╚══╝╚══════╝╚═╝░░╚═╝░░░╚═╝░░░░╚════╝░╚══════╝░╚════╝░░╚═════╝░╚═════╝░
     nextcloud:
         image: nextcloud:latest
         restart: unless-stopped
@@ -126,12 +124,12 @@ services:
         # ports:
         #     - 80:80 # Web interface
 
-# ░█████╗░██████╗░██████╗░░██████╗████████╗░█████╗░░█████╗░██╗░░██╗
-# ██╔══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║░██╔╝
-# ███████║██████╔╝██████╔╝╚█████╗░░░░██║░░░███████║██║░░╚═╝█████═╝░
-# ██╔══██║██╔══██╗██╔══██╗░╚═══██╗░░░██║░░░██╔══██║██║░░██╗██╔═██╗░
-# ██║░░██║██║░░██║██║░░██║██████╔╝░░░██║░░░██║░░██║╚█████╔╝██║░╚██╗
-# ╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝
+    # ░█████╗░██████╗░██████╗░░██████╗████████╗░█████╗░░█████╗░██╗░░██╗
+    # ██╔══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║░██╔╝
+    # ███████║██████╔╝██████╔╝╚█████╗░░░░██║░░░███████║██║░░╚═╝█████═╝░
+    # ██╔══██║██╔══██╗██╔══██╗░╚═══██╗░░░██║░░░██╔══██║██║░░██╗██╔═██╗░
+    # ██║░░██║██║░░██║██║░░██║██████╔╝░░░██║░░░██║░░██║╚█████╔╝██║░╚██╗
+    # ╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝
     prowlarr:
         image: linuxserver/prowlarr:latest
         volumes:
@@ -141,7 +139,7 @@ services:
         # ports:
         #     - 9696:9696
         restart: unless-stopped
-      
+
     sonarr:
         image: linuxserver/sonarr:latest
         volumes:
@@ -152,7 +150,7 @@ services:
         # ports:
         # - 8989:8989
         restart: unless-stopped
-        
+
     radarr:
         image: linuxserver/radarr:latest
         volumes:
@@ -163,7 +161,7 @@ services:
         # ports:
         #     - 7878:7878
         restart: unless-stopped
-                                                
+
     readarr:
         image: linuxserver/readarr:develop
         volumes:
@@ -171,15 +169,15 @@ services:
             - ${ARRPATH}Readarr/books:/data/books
             - ${ARRPATH}Downloads:/downloads
         # ports:
-            # - 8787:8787
+        # - 8787:8787
         restart: unless-stopped
-            
+
     jellyfin:
         image: linuxserver/jellyfin
         ports:
             # - '8096:8096/tcp'   # Web interface
-            - '7359:7359/udp'   # Network discovery
-            - '1900:1900/udp'   # DLNA port
+            - "7359:7359/udp" # Network discovery
+            - "1900:1900/udp" # DLNA port
         volumes:
             - ${ARRPATH}Jellyfin/config:/config
             - ${ARRPATH}Radarr/movies:/data/Movies
@@ -187,19 +185,19 @@ services:
             - ${ARRPATH}Lidarr/music:/data/Music
             - ${ARRPATH}Readarr/books:/data/Books
         restart: unless-stopped
-                                                
+
     jellyseerr:
-       image: fallenbagel/jellyseerr:latest
-       container_name: jellyseerr
-       environment:
+        image: fallenbagel/jellyseerr:latest
+        container_name: jellyseerr
+        environment:
             - LOG_LEVEL=debug
             - TZ=Asia/Tashkent
-       ports:
+        ports:
             - 5055:5055
-       volumes:
+        volumes:
             - /path/to/appdata/config:/app/config
-       restart: unless-stopped
-                                            
+        restart: unless-stopped
+
     qbittorrent:
         image: linuxserver/qbittorrent:latest
         restart: unless-stopped
