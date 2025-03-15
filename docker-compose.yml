@@ -132,7 +132,7 @@ services:
     sonarr:
         image: linuxserver/sonarr:latest
         volumes:
-            - ./config/arrstack/Sonarr/config:/config
+            - ./config/arrstack/sonarr/config:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/media/tvshows:/data/tvshows
             - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/tvshows:/downloads
         # ports:
@@ -142,7 +142,7 @@ services:
     radarr:
         image: linuxserver/radarr:latest
         volumes:
-            - ./config/arrstack/Radarr/config:/config
+            - ./config/arrstack/radarr/config:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/media/movies:/data/movies
             - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/movies:/downloads
         # ports:
@@ -152,7 +152,7 @@ services:
     readarr:
         image: linuxserver/readarr:develop
         volumes:
-            - ./config/arrstack/Readarr/config:/config
+            - ./config/arrstack/readarr/config:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/media/books:/data/books
             - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/books:/downloads
         # ports:
@@ -166,7 +166,7 @@ services:
             - "7359:7359/udp" # Network discovery
             - "1900:1900/udp" # DLNA port
         volumes:
-            - ./config/arrstack/Jellyfin/config:/config
+            - ./config/arrstack/jellyfin/config:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/media:/data
         restart: unless-stopped
 
@@ -184,15 +184,13 @@ services:
     qbittorrent:
         image: linuxserver/qbittorrent:latest
         restart: unless-stopped
-        labels:
-            - "com.centurylinklabs.watchtower.enable=false"
         volumes:
             - ./config/arrstack/qbittorrent/config:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/torrent:/downloads
-        ports:
+        # ports:
             # - 8080:8080 # Web interface
-            - 6881:6881
-            - 6881:6881/udp
+            # - 6881:6881/tcp # Torrenting port
+            # - 6881:6881/udp # Torrenting port
         environment:
             - WEBUI_PORT=8080
             - TORRENTING_PORT=6881
