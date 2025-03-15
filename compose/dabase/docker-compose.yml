@@ -38,7 +38,8 @@ services:
 
     cronman:
         image: alseambusher/crontab-ui
-        # volumes:
+        volumes:
+            - ../../config/dabase/cronman:/contab-ui
         #     - ../../config:/app/config # Optional, only if you want to backup using cronman
         #     - /mnt/bigdisk:/app/backup # Optional, only if you want to backup using cronman
         # ports:

@@ -1,12 +1,12 @@
 name: nextcloud
 services:
     nextcloud:
-        image: nextcloud
+        image: nextcloud:latest
         restart: unless-stopped
         volumes:
-            - nextcloud_data:/var/www/html
-        # ports:
-        #     - 80:80 # Web interface
+            - ${EXTERNAL_MOUNTPOINT}:/var/www/html
+        ports:
+            - 80:80 # Web interface
 
 networks:
     default:
