@@ -187,7 +187,19 @@ services:
             - ${ARRPATH}Lidarr/music:/data/Music
             - ${ARRPATH}Readarr/books:/data/Books
         restart: unless-stopped
-                                                                                                
+                                                
+    jellyseerr:
+       image: fallenbagel/jellyseerr:latest
+       container_name: jellyseerr
+       environment:
+            - LOG_LEVEL=debug
+            - TZ=Asia/Tashkent
+       ports:
+            - 5055:5055
+       volumes:
+            - /path/to/appdata/config:/app/config
+       restart: unless-stopped
+                                            
     qbittorrent:
         image: linuxserver/qbittorrent:latest
         restart: unless-stopped
