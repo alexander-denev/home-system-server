@@ -182,12 +182,15 @@ services:
         restart: unless-stopped
 
     deluge:
+        # Default login details:
+        # Email:    admin
+        # Password: deluge
         image: linuxserver/deluge:latest
         environment:
             - PUID=1000
             - PGID=1000
         volumes:
-            - .config/arrstack/deluge:/config
+            - ./config/arrstack/deluge:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/torrent:/downloads
         # ports:
         #     - 8112:8112 # Web interface
