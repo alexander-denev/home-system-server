@@ -124,7 +124,7 @@ services:
     prowlarr:
         image: linuxserver/prowlarr:latest
         volumes:
-            - ./config/arrstack/prowlarr/config:/config
+            - ./config/arrstack/prowlarr:/config
         # ports:
         #     - 9696:9696
         restart: unless-stopped
@@ -132,7 +132,7 @@ services:
     sonarr:
         image: linuxserver/sonarr:latest
         volumes:
-            - ./config/arrstack/sonarr/config:/config
+            - ./config/arrstack/sonarr:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/media/tvshows:/data/tvshows
             - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/tvshows:/downloads
         # ports:
@@ -142,7 +142,7 @@ services:
     radarr:
         image: linuxserver/radarr:latest
         volumes:
-            - ./config/arrstack/radarr/config:/config
+            - ./config/arrstack/radarr:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/media/movies:/data/movies
             - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/movies:/downloads
         # ports:
@@ -150,9 +150,9 @@ services:
         restart: unless-stopped
 
     readarr:
-        image: linuxserver/readarr:develop
+        image: linuxserver/readarr:latest
         volumes:
-            - ./config/arrstack/readarr/config:/config
+            - ./config/arrstack/readarr:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/media/books:/data/books
             - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/books:/downloads
         # ports:
@@ -160,13 +160,13 @@ services:
         restart: unless-stopped
 
     jellyfin:
-        image: linuxserver/jellyfin
+        image: linuxserver/jellyfin:latest
         ports:
             # - '8096:8096/tcp'   # Web interface
             - "7359:7359/udp" # Network discovery
             - "1900:1900/udp" # DLNA port
         volumes:
-            - ./config/arrstack/jellyfin/config:/config
+            - ./config/arrstack/jellyfin:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/media:/data
         restart: unless-stopped
 
@@ -182,7 +182,7 @@ services:
         restart: unless-stopped
 
     deluge:
-        image: lscr.io/linuxserver/deluge:latest
+        image: linuxserver/deluge:latest
         environment:
             - PUID=1000
             - PGID=1000
