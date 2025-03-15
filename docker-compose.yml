@@ -124,9 +124,7 @@ services:
     prowlarr:
         image: linuxserver/prowlarr:latest
         volumes:
-            - ${ARRPATH}Prowlarr/config:/config
-            - ${ARRPATH}Prowlarr/backup:/data/Backup
-            - ${ARRPATH}Downloads:/downloads
+            - ./config/arrstack/prowlarr/config:/config
         # ports:
         #     - 9696:9696
         restart: unless-stopped
@@ -134,10 +132,9 @@ services:
     sonarr:
         image: linuxserver/sonarr:latest
         volumes:
-            - ${ARRPATH}Sonarr/config:/config
-            - ${ARRPATH}Sonarr/backup:/data/Backup
-            - ${ARRPATH}Sonarr/tvshows:/data/tvshows
-            - ${ARRPATH}Downloads:/downloads
+            - ./config/arrstack/Sonarr/config:/config
+            - ${BIGFILES_MOUNTPOINT}/arrstack/media/tvshows:/data/tvshows
+            - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/tvshows:/downloads
         # ports:
         # - 8989:8989
         restart: unless-stopped
@@ -145,10 +142,9 @@ services:
     radarr:
         image: linuxserver/radarr:latest
         volumes:
-            - ${ARRPATH}Radarr/config:/config
-            - ${ARRPATH}Radarr/movies:/data/movies
-            - ${ARRPATH}Radarr/backup:/data/Backup
-            - ${ARRPATH}Downloads:/downloads
+            - ./config/arrstack/Radarr/config:/config
+            - ${BIGFILES_MOUNTPOINT}/arrstack/media/movies:/data/movies
+            - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/movies:/downloads
         # ports:
         #     - 7878:7878
         restart: unless-stopped
@@ -156,9 +152,9 @@ services:
     readarr:
         image: linuxserver/readarr:develop
         volumes:
-            - ${ARRPATH}Readarr/config:/config
-            - ${ARRPATH}Readarr/books:/data/books
-            - ${ARRPATH}Downloads:/downloads
+            - ./config/arrstack/Readarr/config:/config
+            - ${BIGFILES_MOUNTPOINT}/arrstack/media/books:/data/books
+            - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/books:/downloads
         # ports:
         # - 8787:8787
         restart: unless-stopped
@@ -170,11 +166,8 @@ services:
             - "7359:7359/udp" # Network discovery
             - "1900:1900/udp" # DLNA port
         volumes:
-            - ${ARRPATH}Jellyfin/config:/config
-            - ${ARRPATH}Radarr/movies:/data/Movies
-            - ${ARRPATH}Sonarr/tvshows:/data/TVShows
-            - ${ARRPATH}Lidarr/music:/data/Music
-            - ${ARRPATH}Readarr/books:/data/Books
+            - ./config/arrstack/Jellyfin/config:/config
+            - ${BIGFILES_MOUNTPOINT}/arrstack/media:/data
         restart: unless-stopped
 
     jellyseerr:
@@ -182,10 +175,10 @@ services:
         container_name: jellyseerr
         environment:
             - LOG_LEVEL=debug
-        ports:
-            - 5055:5055
+        # ports:
+        #     - 5055:5055 # Web interface
         volumes:
-            - /path/to/appdata/config:/app/config
+            - ./config/arrstack/jellyseerr:/app/config
         restart: unless-stopped
 
     qbittorrent:
@@ -194,8 +187,8 @@ services:
         labels:
             - "com.centurylinklabs.watchtower.enable=false"
         volumes:
-            - ${ARRPATH}qbittorrent/config:/config
-            - ${ARRPATH}Downloads:/downloads
+            - ./config/arrstack/qbittorrent/config:/config
+            - ${BIGFILES_MOUNTPOINT}/arrstack/torrent:/downloads
         ports:
             # - 8080:8080 # Web interface
             - 6881:6881
