@@ -47,14 +47,14 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
         restart: unless-stopped
         environment:
-            - WATCHTOWER_SCHEDULE="0 0 4 * * *" # Run every day at 4am
+            - WATCHTOWER_SCHEDULE=0 0 4 * * * # Run every day at 4am
 
     cronman:
         image: alseambusher/crontab-ui
         volumes:
             - ./config/dabase/cronman:/contab-ui
-        #     - ./config:/app/config # Optional, only if you want to backup using cronman
-        #     - /mnt/bigdisk:/app/backup # Optional, only if you want to backup using cronman
+            - ./config:/app/config # Optional, only if you want to backup using cronman
+            - ${BIGFILES_MOUNTPOINT}:/app/backup # Optional, only if you want to backup using cronman
         # ports:
             # - 8000:8000 # Web Interface
 
@@ -136,8 +136,8 @@ services:
             - ${ARRPATH}Prowlarr/config:/config
             - ${ARRPATH}Prowlarr/backup:/data/Backup
             - ${ARRPATH}Downloads:/downloads
-        ports:
-            - 9696:9696
+        # ports:
+        #     - 9696:9696
         restart: unless-stopped
       
     sonarr:
@@ -147,8 +147,8 @@ services:
             - ${ARRPATH}Sonarr/backup:/data/Backup
             - ${ARRPATH}Sonarr/tvshows:/data/tvshows
             - ${ARRPATH}Downloads:/downloads
-        ports:
-        - 8989:8989
+        # ports:
+        # - 8989:8989
         restart: unless-stopped
         
     radarr:
@@ -158,8 +158,8 @@ services:
             - ${ARRPATH}Radarr/movies:/data/movies
             - ${ARRPATH}Radarr/backup:/data/Backup
             - ${ARRPATH}Downloads:/downloads
-        ports:
-            - 7878:7878
+        # ports:
+        #     - 7878:7878
         restart: unless-stopped
                                                 
     lidarr:
@@ -168,8 +168,8 @@ services:
             - ${ARRPATH}Lidarr/config:/config
             - ${ARRPATH}Lidarr/music:/data/musicfolder
             - ${ARRPATH}Downloads:/downloads
-        ports:
-            - 8686:8686
+        # ports:
+        #     - 8686:8686
         restart: unless-stopped
 
     readarr:
@@ -178,14 +178,14 @@ services:
             - ${ARRPATH}Readarr/config:/config
             - ${ARRPATH}Readarr/books:/data/books
             - ${ARRPATH}Downloads:/downloads
-        ports:
-            - 8787:8787
+        # ports:
+            # - 8787:8787
         restart: unless-stopped
             
     jellyfin:
         image: linuxserver/jellyfin
         ports:
-            - '8096:8096/tcp'   # Jellyfin web interface
+            # - '8096:8096/tcp'   # Web interface
             - '7359:7359/udp'   # Network discovery
             - '1900:1900/udp'   # DLNA port
         volumes:
@@ -205,7 +205,7 @@ services:
             - ${ARRPATH}qbittorrent/config:/config
             - ${ARRPATH}Downloads:/downloads
         ports:
-            - 8080:8080
+            # - 8080:8080 # Web interface
             - 6881:6881
             - 6881:6881/udp
         environment:
