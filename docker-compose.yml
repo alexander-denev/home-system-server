@@ -158,10 +158,6 @@ services:
 
     bazarr:
         image: linuxserver/bazarr:latest
-        container_name: bazarr
-        environment:
-            - PUID=1000
-            - PGID=1000
         volumes:
             - /path/to/bazarr/config:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack:/data
@@ -182,9 +178,6 @@ services:
 
     jellyseerr:
         image: fallenbagel/jellyseerr:latest
-        container_name: jellyseerr
-        environment:
-            - LOG_LEVEL=debug
         # ports:
         #     - 5055:5055 # Web interface
         volumes:
@@ -196,9 +189,6 @@ services:
         # Email:    admin
         # Password: deluge
         image: linuxserver/deluge:latest
-        environment:
-            - PUID=1000
-            - PGID=1000
         volumes:
             - ./config/arrstack/deluge:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/torrent:/data/torrent
