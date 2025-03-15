@@ -134,7 +134,7 @@ services:
         volumes:
             - ./config/arrstack/sonarr:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/media/tvshows:/data/tvshows
-            - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/tvshows:/downloads
+            - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/tvshows:/data/downloads
         # ports:
         # - 8989:8989
         restart: unless-stopped
@@ -144,7 +144,7 @@ services:
         volumes:
             - ./config/arrstack/radarr:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/media/movies:/data/movies
-            - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/movies:/downloads
+            - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/movies:/data/downloads
         # ports:
         #     - 7878:7878
         restart: unless-stopped
@@ -154,9 +154,23 @@ services:
         volumes:
             - ./config/arrstack/readarr:/config
             - ${BIGFILES_MOUNTPOINT}/arrstack/media/books:/data/books
-            - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/books:/downloads
+            - ${BIGFILES_MOUNTPOINT}/arrstack/torrent/books:/data/downloads
         # ports:
         # - 8787:8787
+        restart: unless-stopped
+
+    bazarr:
+        image: linuxserver/bazarr:latest
+        container_name: bazarr
+        environment:
+            - PUID=1000
+            - PGID=1000
+        volumes:
+            - /path/to/bazarr/config:/config
+            - ${BIGFILES_MOUNTPOINT}/arrstack/media/movies:/data/movies
+            - ${BIGFILES_MOUNTPOINT}/arrstack/media/tvshows:/data/tvshows
+        # ports:
+        #     - 6767:6767 # Web interface
         restart: unless-stopped
 
     jellyfin:
@@ -191,7 +205,7 @@ services:
             - PGID=1000
         volumes:
             - ./config/arrstack/deluge:/config
-            - ${BIGFILES_MOUNTPOINT}/arrstack/torrent:/downloads
+            - ${BIGFILES_MOUNTPOINT}/arrstack/torrent:/data/downloads
         # ports:
         #     - 8112:8112 # Web interface
         #     - 6881:6881 # Torrent port
