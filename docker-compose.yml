@@ -223,3 +223,16 @@ services:
         #     - 6881:6881/udp # Torrent port
         #     - 58846:58846 # Thin client connectivity
         restart: unless-stopped
+
+    # ███████╗██╗██╗░░░░░███████╗░██████╗
+    # ██╔════╝██║██║░░░░░██╔════╝██╔════╝
+    # █████╗░░██║██║░░░░░█████╗░░╚█████╗░
+    # ██╔══╝░░██║██║░░░░░██╔══╝░░░╚═══██╗
+    # ██║░░░░░██║███████╗███████╗██████╔╝
+    # ╚═╝░░░░░╚═╝╚══════╝╚══════╝╚═════╝░
+    filebrowser:
+        image: filebrowser/filebrowser:s6
+        volumes:
+            - ./config/filebrowser:/config
+            - ${BIGFILES_MOUNTPOINT}/filebrowser/files:/srv
+            - ${BIGFILES_MOUNTPOINT}/filebrowser/database:/database
