@@ -128,6 +128,14 @@ services:
         #     - 80:80 # Web interface
         depends_on:
             - postgres
+        environment:
+            NEXTCLOUD_ADMIN_USER: admin
+            NEXTCLOUD_ADMIN_PASSWORD: admin
+            POSTGRES_DB: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_HOST: postgres:5432
+
     postgres:
         image: postgres:latest
         restart: unless-stopped
