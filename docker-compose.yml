@@ -26,10 +26,10 @@ services:
             - ./config/dabeis/proxyman/letsencrypt:/etc/letsencrypt
         healthcheck:
             test: ["CMD", "/usr/bin/check-health"]
-            interval: 60s
-            timeout: 10s
+            timeout: 5s
             retries: 3
-            start_period: 30s
+            interval: 10s
+            start_interval: 5s
 
     homarr:
         image: ghcr.io/homarr-labs/homarr:latest
@@ -127,7 +127,8 @@ services:
         # ports:
         #     - 80:80 # Web interface
         depends_on:
-            - postgres
+            postgres:
+                condition: service_healthy
         environment:
             NEXTCLOUD_TRUSTED_DOMAINS: ${STACK_HOST} *.${STACK_HOST}
             NEXTCLOUD_ADMIN_USER: admin
@@ -148,6 +149,12 @@ services:
             POSTGRES_DB: postgres
         # ports:
         #     - 5432:5432 # Database port
+        healthcheck:
+            test: ["CMD", "pg_isready", "-U", "postgres"]
+            timeout: 5s
+            retries: 3
+            interval: 10s
+            start_interval: 5s
 
     # ░█████╗░██████╗░██████╗░░██████╗████████╗░█████╗░░█████╗░██╗░░██╗
     # ██╔══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║░██╔╝
