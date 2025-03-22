@@ -48,6 +48,7 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
         restart: unless-stopped
         environment:
+            - TZ=${TZ} # Timezone
             - WATCHTOWER_SCHEDULE=0 0 4 * * * # Run every day at 4am
 
     wireguard:
