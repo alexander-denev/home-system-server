@@ -225,3 +225,5 @@ services:
             - ./config/filebrowser:/config
             - ${BIGFILES_MOUNTPOINT}/filebrowser/files:/srv
             - ${BIGFILES_MOUNTPOINT}/filebrowser/database:/database
+        # ports:
+        #     - 80:80 # Web interface
