@@ -26,10 +26,10 @@ services:
             - ./config/dabeis/proxyman/letsencrypt:/etc/letsencrypt
         healthcheck:
             test: ["CMD", "/usr/bin/check-health"]
-            interval: 60s
-            timeout: 10s
+            timeout: 5s
             retries: 3
-            start_period: 30s
+            interval: 10s
+            start_interval: 5s
 
     homarr:
         image: ghcr.io/homarr-labs/homarr:latest
@@ -48,6 +48,7 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
         restart: unless-stopped
         environment:
+            - TZ=${TZ} # Timezone
             - WATCHTOWER_SCHEDULE=0 0 4 * * * # Run every day at 4am
 
     wireguard:
@@ -120,14 +121,22 @@ services:
         image: nextcloud:latest
         restart: unless-stopped
         volumes:
-            - ./config/nextcloud/config:/var/www/html/config
-            - ./config/nextcloud/custom_apps:/var/www/html/custom_apps
-            - ./config/nextcloud/theme:/var/www/html/themes
-            - ${BIGFILES_MOUNTPOINT}/nextcloud:/var/www/html/data
+            - ${BIGFILES_MOUNTPOINT}/nextcloud:/var/www/html
         # ports:
         #     - 80:80 # Web interface
         depends_on:
-            - postgres
+            postgres:
+                condition: service_healthy
+        environment:
+            NEXTCLOUD_TRUSTED_DOMAINS: ${STACK_HOST} *.${STACK_HOST}
+            TRUSTED_PROXIES: 127.16.0.1/12 192.168.0.0/16
+            NEXTCLOUD_ADMIN_USER: admin
+            NEXTCLOUD_ADMIN_PASSWORD: admin
+            POSTGRES_DB: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_HOST: postgres:5432
+
     postgres:
         image: postgres:latest
         restart: unless-stopped
@@ -139,6 +148,12 @@ services:
             POSTGRES_DB: postgres
         # ports:
         #     - 5432:5432 # Database port
+        healthcheck:
+            test: ["CMD", "pg_isready", "-U", "postgres"]
+            timeout: 5s
+            retries: 5
+            interval: 10s
+            start_interval: 10s
 
     # ░█████╗░██████╗░██████╗░░██████╗████████╗░█████╗░░█████╗░██╗░░██╗
     # ██╔══██╗██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██╔══██╗██╔══██╗██║░██╔╝
