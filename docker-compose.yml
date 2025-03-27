@@ -111,32 +111,6 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
             - /var/lib/docker/volumes:/var/lib/docker/volumes
 
-    # ███╗░░██╗███████╗██╗░░██╗████████╗░█████╗░██╗░░░░░░█████╗░██╗░░░██╗██████╗░
-    # ████╗░██║██╔════╝╚██╗██╔╝╚══██╔══╝██╔══██╗██║░░░░░██╔══██╗██║░░░██║██╔══██╗
-    # ██╔██╗██║█████╗░░░╚███╔╝░░░░██║░░░██║░░╚═╝██║░░░░░██║░░██║██║░░░██║██║░░██║
-    # ██║╚████║██╔══╝░░░██╔██╗░░░░██║░░░██║░░██╗██║░░░░░██║░░██║██║░░░██║██║░░██║
-    # ██║░╚███║███████╗██╔╝╚██╗░░░██║░░░╚█████╔╝███████╗╚█████╔╝╚██████╔╝██████╔╝
-    # ╚═╝░░╚══╝╚══════╝╚═╝░░╚═╝░░░╚═╝░░░░╚════╝░╚══════╝░╚════╝░░╚═════╝░╚═════╝░
-    nextcloud:
-        image: nextcloud:latest
-        restart: unless-stopped
-        volumes:
-            - ${BIGFILES_MOUNTPOINT}/nextcloud:/var/www/html
-        # ports:
-        #     - 80:80 # Web interface
-        depends_on:
-            postgres:
-                condition: service_healthy
-        environment:
-            NEXTCLOUD_TRUSTED_DOMAINS: ${STACK_HOST} *.${STACK_HOST}
-            TRUSTED_PROXIES: 127.16.0.1/12 192.168.0.0/16
-            NEXTCLOUD_ADMIN_USER: admin
-            NEXTCLOUD_ADMIN_PASSWORD: admin
-            POSTGRES_DB: postgres
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-            POSTGRES_HOST: postgres:5432
-
     postgres:
         image: postgres:latest
         restart: unless-stopped
