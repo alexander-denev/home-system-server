@@ -120,8 +120,9 @@ services:
 
     seafile:
         image: seafileltd/seafile-mc:latest
-        ports:
-            - 80:80
+        restart: unless-stopped
+        # ports:
+        #     - 80:80
         environment:
             - TIME_ZONE=${TZ}
 
