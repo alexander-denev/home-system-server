@@ -227,3 +227,4 @@ services:
             - ${BIGFILES_MOUNTPOINT}/filebrowser/database:/database
         # ports:
         #     - 80:80 # Web interface
+        restart: unless-stopped
