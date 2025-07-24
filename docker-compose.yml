@@ -16,8 +16,8 @@ services:
             - "8080:81" # Admin Web Interface Port
         restart: unless-stopped
         volumes:
-            - ./config/dabeis/proxyman/data:/data
-            - ./config/dabeis/proxyman/letsencrypt:/etc/letsencrypt
+            - ./config/proxyman/data:/data
+            - ./config/proxyman/letsencrypt:/etc/letsencrypt
         healthcheck:
             test: ["CMD", "/usr/bin/check-health"]
             timeout: 5s
@@ -31,7 +31,7 @@ services:
         # - '7575:7575' # Web Interface
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
-            - ./config/dabeis/homarr:/appdata
+            - ./config/homarr:/appdata
         restart: unless-stopped
         environment:
             - SECRET_ENCRYPTION_KEY=${SECRET_ENCRYPTION_KEY}
@@ -48,7 +48,7 @@ services:
     wireguard:
         image: ghcr.io/wg-easy/wg-easy
         volumes:
-            - ./config/dabeis/wireguard:/etc/wireguard
+            - ./config/wireguard:/etc/wireguard
         ports:
             - "51820:51820/udp"
             # - "51821:51821/tcp" # Web Interface
@@ -93,7 +93,7 @@ services:
         restart: unless-stopped
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-            - ./config/dabeis/portainer:/data
+            - ./config/portainer:/data
 
     portainer_agent:
         # We run a portainer agent due to the fact, that portainer alone cannot browse volumes. This is a workaround.
