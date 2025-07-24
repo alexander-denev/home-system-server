@@ -112,3 +112,5 @@ services:
         restart: unless-stopped
         volumes:
             - ./config/n8n:/home/node/.n8n
+        environment:
+            - TZ=${TZ} # Timezone
