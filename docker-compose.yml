@@ -114,3 +114,5 @@ services:
             - ./config/n8n:/home/node/.n8n
         environment:
             - TZ=${TZ} # Timezone
+            - N8N_HOST=n8n.${STACK_HOST}
+            - N8N_PORT=5678
