@@ -106,9 +106,9 @@ services:
             - /var/lib/docker/volumes:/var/lib/docker/volumes
 
     n8n:
-        image: docker.n8n.io/n8nio/n8n
-        ports:
-            - 5678:5678 # Web Interface
+        image: n8nio/n8n:latest
+        # ports:
+            # - 5678:5678 # Web Interface
         restart: unless-stopped
         volumes:
             - ./config/n8n:/home/node/.n8n
