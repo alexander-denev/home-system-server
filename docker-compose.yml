@@ -113,6 +113,7 @@ services:
         volumes:
             - ./config/n8n:/home/node/.n8n
         environment:
-            - TZ=${TZ} # Timezone
+            - TZ=${TZ} # System timezone
+            - GENERIC_TIMEZONE=${TZ} # Timezone for nodes like Schedule
             - N8N_HOST=n8n.${STACK_HOST}
             - N8N_PORT=5678
