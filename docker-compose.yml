@@ -120,7 +120,6 @@ services:
         restart: unless-stopped
         volumes:
             - n8n_data:/home/node/.n8n
-        user: root
         environment:
             - TZ=${TZ} # System timezone
             - GENERIC_TIMEZONE=${TZ} # Timezone for nodes like Schedule
