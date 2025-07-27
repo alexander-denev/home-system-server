@@ -4,6 +4,14 @@ networks:
     default:
         name: home-system-server
 
+volumes:
+    proxyman_data:
+    proxyman_letsencrypt:
+    homarr_data:
+    wireguard_data:
+    portainer_data:
+    n8n_data:
+
 services:
     proxyman:
         # Default login details:
@@ -16,8 +24,8 @@ services:
             - "8080:81" # Admin Web Interface Port
         restart: unless-stopped
         volumes:
-            - ./config/proxyman/data:/data
-            - ./config/proxyman/letsencrypt:/etc/letsencrypt
+            - proxyman_data:/data
+            - proxyman_letsencrypt:/etc/letsencrypt
         healthcheck:
             test: ["CMD", "/usr/bin/check-health"]
             timeout: 5s
@@ -31,7 +39,7 @@ services:
         # - '7575:7575' # Web Interface
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
-            - ./config/homarr:/appdata
+            - homarr_data:/appdata
         restart: unless-stopped
         environment:
             - SECRET_ENCRYPTION_KEY=${SECRET_ENCRYPTION_KEY}
@@ -48,7 +56,7 @@ services:
     wireguard:
         image: ghcr.io/wg-easy/wg-easy
         volumes:
-            - ./config/wireguard:/etc/wireguard
+            - wireguard_data:/etc/wireguard
         ports:
             - "51820:51820/udp"
             # - "51821:51821/tcp" # Web Interface
@@ -93,7 +101,7 @@ services:
         restart: unless-stopped
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-            - ./config/portainer:/data
+            - portainer_data:/data
 
     portainer_agent:
         # We run a portainer agent due to the fact, that portainer alone cannot browse volumes. This is a workaround.
@@ -111,7 +119,7 @@ services:
             # - 5678:5678 # Web Interface
         restart: unless-stopped
         volumes:
-            - ./config/n8n:/home/node/.n8n
+            - n8n_data:/home/node/.n8n
         user: root
         environment:
             - TZ=${TZ} # System timezone
