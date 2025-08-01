@@ -127,3 +127,4 @@ services:
             - N8N_HOST=n8n.${STACK_HOST}
             - N8N_PORT=5678
             - N8N_EDITOR_BASE_URL=https://n8n.${STACK_HOST}
+            - WEBHOOK_URL=https://n8n.${STACK_HOST}
