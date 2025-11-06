@@ -11,8 +11,7 @@ volumes:
     wireguard_data:
     portainer_data:
     n8n_data:
-    filebrowser_config:
-    filebrowser_db:
+    filebrowser:
 
 services:
     proxyman:
