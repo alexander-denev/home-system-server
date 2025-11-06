@@ -11,7 +11,8 @@ volumes:
     wireguard_data:
     portainer_data:
     n8n_data:
-    filebrowser:
+    filebrowser_config:
+    filebrowser_db:
 
 services:
     proxyman:
@@ -118,7 +119,7 @@ services:
     n8n:
         image: n8nio/n8n:latest
         # ports:
-            # - 5678:5678 # Web Interface
+        # - 5678:5678 # Web Interface
         restart: unless-stopped
         volumes:
             - n8n_data:/home/node/.n8n
@@ -134,8 +135,8 @@ services:
     filebrowser:
         image: filebrowser/filebrowser:s6
         volumes:
-            - filebrowser/config:/config
-            - filebrowser/db:/database
+            - filebrowser_config:/config
+            - filebrowser_db:/database
             - ${BIGFILES_MOUNTPOINT}/filebrowser/files:/srv
         # ports:
         #     - 80:80 # Web interface
