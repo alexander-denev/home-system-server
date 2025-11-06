@@ -135,8 +135,8 @@ services:
     filebrowser:
         image: filebrowser/filebrowser:s6
         volumes:
-            - filebrowser_config:/config
-            - filebrowser_db/filebrowser/database:/database
+            - filebrowser/config:/config
+            - filebrowser/db:/database
             - ${BIGFILES_MOUNTPOINT}/filebrowser/files:/srv
         # ports:
         #     - 80:80 # Web interface
