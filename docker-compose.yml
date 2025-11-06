@@ -135,7 +135,7 @@ services:
     filebrowser:
         image: filebrowser/filebrowser:s6
         volumes:
-            - filebrowser_config:/config
+            - filebrowser_config:/config # You should set "tokenExpirationTime" in settings.json (Default: 2 hours)
             - filebrowser_db:/database
             - ${BIGFILES_MOUNTPOINT}/filebrowser/files:/srv
         # ports:
