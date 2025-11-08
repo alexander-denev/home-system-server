@@ -133,7 +133,7 @@ services:
             - WEBHOOK_URL=https://n8n.${STACK_HOST}
 
     filebrowser:
-        image: gtstef/filebrowser
+        image: filebrowser/filebrowser:s6
         volumes:
             - filebrowser_config:/config # You should set "tokenExpirationTime" in settings.json (Default: 2 hours)
             - filebrowser_db:/database
