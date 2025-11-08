@@ -141,3 +141,13 @@ services:
         # ports:
         #     - 80:80 # Web interface
         restart: unless-stopped
+
+    filebrowserq:
+        image: gtstef/filebrowser
+        volumes:
+            - filebrowserq_config:/config # You should set "tokenExpirationTime" in settings.json (Default: 2 hours)
+            - filebrowserq_db:/database
+            - ${BIGFILES_MOUNTPOINT}/filebrowserq/files:/srv
+        # ports:
+        #     - 80:80 # Web interface
+        restart: unless-stopped

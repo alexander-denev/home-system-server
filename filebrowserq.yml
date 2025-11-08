@@ -1,0 +1,22 @@
+auth:
+    tokenExpirationHours: 72 # time in hours each web UI session token is valid for. Default is 2 hours.
+
+server:
+    sources:
+        - path: "/srv" # or '/folder' in above example
+          config:
+              defaultEnabled: true # Give access to all users by default
+              createUserDir: true # create a user directory for each user
+              defaultUserScope: "/users" # default "/" should match folders under path
+
+userDefaults:
+    darkMode: false # should dark mode be enabled
+    permissions:
+        admin: false # allow admin access
+        api: true # allow api access
+        modify: true # allow modifying files
+        share: true # allow sharing files
+        delete: true # allow deleting files
+        create: true # allow creating or uploading files
+        download: true # allow downloading files
+        realtime: false # allow realtime updates
