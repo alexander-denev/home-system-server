@@ -15,6 +15,7 @@ userDefaults:
     showHidden: true # show hidden files in the UI. On windows this includes files starting with a dot and windows hidden files
     dateFormat: true # when false, the date is relative, when true, the date is an exact timestamp
     viewMode: "list" # view mode to use: eg. normal, list, grid, or compact
+    disablePreviewExt: ".pdf" # space separated list of file extensions to disable preview for
     permissions:
         admin: false # allow admin access
         api: true # allow api access
