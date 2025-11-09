@@ -11,8 +11,7 @@ volumes:
     wireguard_data:
     portainer_data:
     n8n_data:
-    filebrowser_config:
-    filebrowser_db:
+    filebrowserq_db:
 
 services:
     proxyman:
@@ -132,12 +131,14 @@ services:
             - N8N_EDITOR_BASE_URL=https://n8n.${STACK_HOST}
             - WEBHOOK_URL=https://n8n.${STACK_HOST}
 
-    filebrowser:
-        image: filebrowser/filebrowser:s6
+    filebrowserq:
+        image: gtstef/filebrowser
         volumes:
-            - filebrowser_config:/config # You should set "tokenExpirationTime" in settings.json (Default: 2 hours)
-            - filebrowser_db:/database
-            - ${BIGFILES_MOUNTPOINT}/filebrowser/files:/srv
+            - ./filebrowserq.yml:/config/filebrowserq.yml
+            - filebrowserq_db:/database
+            - ${BIGFILES_MOUNTPOINT}/files:/srv
         # ports:
         #     - 80:80 # Web interface
         restart: unless-stopped
+        environment:
+            - FILEBROWSER_CONFIG=/config/filebrowserq.yml
