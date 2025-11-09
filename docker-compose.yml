@@ -46,15 +46,6 @@ services:
         environment:
             - SECRET_ENCRYPTION_KEY=${SECRET_ENCRYPTION_KEY}
 
-    watchtower:
-        image: containrrr/watchtower
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-        restart: unless-stopped
-        environment:
-            - TZ=${TZ} # Timezone
-            - WATCHTOWER_SCHEDULE=0 0 4 * * * # Run every day at 4am
-
     wireguard:
         image: ghcr.io/wg-easy/wg-easy
         volumes:
