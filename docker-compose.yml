@@ -13,6 +13,7 @@ volumes:
     n8n_data:
     filebrowser_config:
     filebrowser_db:
+    filebrowserq_db:
 
 services:
     proxyman:
@@ -137,7 +138,7 @@ services:
         volumes:
             - filebrowser_config:/config # You should set "tokenExpirationTime" in settings.json (Default: 2 hours)
             - filebrowser_db:/database
-            - ${BIGFILES_MOUNTPOINT}/filebrowser/files:/srv
+            - ${BIGFILES_MOUNTPOINT}/files:/srv
         # ports:
         #     - 80:80 # Web interface
         restart: unless-stopped
@@ -145,9 +146,11 @@ services:
     filebrowserq:
         image: gtstef/filebrowser
         volumes:
-            - filebrowserq_config:/config # You should set "tokenExpirationTime" in settings.json (Default: 2 hours)
+            - ./filebrowserq.yml:/config/filebrowserq.yml
             - filebrowserq_db:/database
-            - ${BIGFILES_MOUNTPOINT}/filebrowserq/files:/srv
+            - ${BIGFILES_MOUNTPOINT}/files:/srv
         # ports:
         #     - 80:80 # Web interface
         restart: unless-stopped
+        environment:
+            - FILEBROWSER_CONFIG=/config/filebrowserq.yml

@@ -2,15 +2,19 @@ auth:
     tokenExpirationHours: 72 # time in hours each web UI session token is valid for. Default is 2 hours.
 
 server:
+    database: "/database/filebrowserq.db"
     sources:
-        - path: "/srv" # or '/folder' in above example
+        - path: "/srv"
+          name: "Files"
           config:
               defaultEnabled: true # Give access to all users by default
               createUserDir: true # create a user directory for each user
               defaultUserScope: "/users" # default "/" should match folders under path
 
 userDefaults:
-    darkMode: false # should dark mode be enabled
+    showHidden: true # show hidden files in the UI. On windows this includes files starting with a dot and windows hidden files
+    dateFormat: true # when false, the date is relative, when true, the date is an exact timestamp
+    viewMode: "list" # view mode to use: eg. normal, list, grid, or compact
     permissions:
         admin: false # allow admin access
         api: true # allow api access
@@ -20,3 +24,14 @@ userDefaults:
         create: true # allow creating or uploading files
         download: true # allow downloading files
         realtime: false # allow realtime updates
+    preview:
+        disableHideSidebar: false # disable the hide sidebar preview for previews and editors
+        highQuality: true # generate high quality thumbnail preview images
+        image: true # show thumbnail preview image for image files
+        video: true # show thumbnail preview image for video files
+        motionVideoPreview: true # show multiple frames for videos in thumbnail preview when hovering
+        office: true # show thumbnail preview image for office files
+        popup: true # show larger popup preview when hovering over thumbnail
+        autoplayMedia: true # autoplay media files in preview
+        defaultMediaPlayer: false # disable html5 media player and use the default media player
+        folder: true # show thumbnail preview image for folder files
