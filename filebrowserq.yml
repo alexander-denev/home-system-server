@@ -35,4 +35,4 @@ userDefaults:
         popup: true # show larger popup preview when hovering over thumbnail
         autoplayMedia: true # autoplay media files in preview
         defaultMediaPlayer: false # disable html5 media player and use the default media player
-        folder: true # show thumbnail preview image for folder files
+        folder: false # show thumbnail preview image for folder files
