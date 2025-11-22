@@ -134,3 +134,4 @@ services:
         restart: unless-stopped
         environment:
             - FILEBROWSER_CONFIG=/config/filebrowserq.yml
+        user: filebrowser
