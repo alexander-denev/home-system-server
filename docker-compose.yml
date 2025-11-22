@@ -123,7 +123,7 @@ services:
             - WEBHOOK_URL=https://n8n.${STACK_HOST}
 
     filebrowserq:
-        image: gtstef/filebrowser:1.0.0-stable
+        image: gtstef/filebrowser
         volumes:
             - ./filebrowserq.yml:/config/filebrowserq.yml
             - filebrowserq_db:/database
