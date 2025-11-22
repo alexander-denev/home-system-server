@@ -3,6 +3,7 @@ auth:
 
 server:
     database: "/database/filebrowserq.db"
+    cacheDir: "/cache"
     sources:
         - path: "/srv"
           name: "Files"

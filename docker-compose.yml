@@ -128,6 +128,7 @@ services:
             - ./filebrowserq.yml:/config/filebrowserq.yml
             - filebrowserq_db:/database
             - ${BIGFILES_MOUNTPOINT}/files:/srv
+            - ${BIGFILES_MOUNTPOINT}/cache:/cache
         # ports:
         #     - 80:80 # Web interface
         restart: unless-stopped
