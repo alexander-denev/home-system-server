@@ -7,7 +7,6 @@ networks:
 volumes:
     proxyman_data:
     proxyman_letsencrypt:
-    homarr_data:
     wireguard_data:
     portainer_data:
     n8n_data:
@@ -34,17 +33,6 @@ services:
             retries: 3
             start_period: 5m
             start_interval: 5s
-
-    homarr:
-        image: ghcr.io/homarr-labs/homarr:latest
-        # ports:
-        # - '7575:7575' # Web Interface
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
-            - homarr_data:/appdata
-        restart: unless-stopped
-        environment:
-            - SECRET_ENCRYPTION_KEY=${SECRET_ENCRYPTION_KEY}
 
     wireguard:
         image: ghcr.io/wg-easy/wg-easy
