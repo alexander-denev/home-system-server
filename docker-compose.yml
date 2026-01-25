@@ -10,6 +10,7 @@ volumes:
     wireguard_data:
     n8n_data:
     filebrowserq_db:
+    yacht:
 
 services:
     proxyman:
@@ -103,3 +104,12 @@ services:
         environment:
             - FILEBROWSER_CONFIG=/config/filebrowserq.yml
         user: filebrowser
+
+    yacht:
+        image: selfhostedpro/yacht
+        restart: unless-stopped
+        # ports:
+        #     - "8000:8000" # Web Interface
+        volumes:
+            - yacht:/config
+            - /var/run/docker.sock:/var/run/docker.sock
