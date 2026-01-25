@@ -1,5 +1,5 @@
 auth:
-    tokenExpirationHours: 168 # time in hours each web UI session token is valid for. Default is 2 hours.
+    tokenExpirationHours: 720 # time in hours each web UI session token is valid for. Default is 2 hours.
 
 server:
     database: "/database/filebrowserq.db"
