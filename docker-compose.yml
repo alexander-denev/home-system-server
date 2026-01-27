@@ -115,16 +115,32 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
 
     ftp:
-        image: delfer/alpine-ftp-server
+        image: markhobson/vsftpd
         restart: unless-stopped
         ports:
             - "21:21" # FTP Control Port
             - "21000-21010:21000-21010" # Passive ports
         environment:
-            - ADDRESS=ftp.${STACK_HOST}
-            - USERS=admin|${FTP_PASSWORD}|/files
+            - TZ=${TZ}
+
+            - FTP_USER=admin
+            - FTP_PASS=${FTP_PASSWORD}
+            - PASV_ADDRESS=ftp.${STACK_HOST}
+            - PASV_ADDR_RESOLVE=YES
+            - PASV_ENABLE=YES
+            - PASV_MIN_PORT=21000
+            - PASV_MAX_PORT=21010
+            - FILE_OPEN_MODE=0755
+            - LOCAL_UMASK=0
+            - SSL_ENABLE=YES
             - TLS_CERT="/letsencrypt/live/npm-${FTP_CERT_ID}/fullchain.pem"
             - TLS_KEY="/letsencrypt/live/npm-${FTP_CERT_ID}/privkey.pem"
+
+            # - ADDRESS=ftp.${STACK_HOST}
+            # - USERS=admin|${FTP_PASSWORD}|/files
+            # - TLS_CERT="/letsencrypt/live/npm-${FTP_CERT_ID}/fullchain.pem"
+            # - TLS_KEY="/letsencrypt/live/npm-${FTP_CERT_ID}/privkey.pem"
         volumes:
             - ${BIGFILES_MOUNTPOINT}/files:/files
             - proxyman_letsencrypt:/letsencrypt
+        user: 1000:1000
