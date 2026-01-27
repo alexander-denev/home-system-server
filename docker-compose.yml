@@ -22,9 +22,6 @@ services:
             - "80:80" # Public HTTP Port
             - "443:443" # Public HTTPS Port
             - "8080:81" # Admin Web Interface Port
-
-            - "21:21" # FTP Control Port
-            - "21000-21010:21000-21010" # FTP Passive ports
         restart: unless-stopped
         volumes:
             - proxyman_data:/data
@@ -120,9 +117,9 @@ services:
     ftp:
         image: delfer/alpine-ftp-server
         restart: unless-stopped
-        # ports:
-        #     - "21:21" # FTP Control Port
-        #     - "21000-21010:21000-21010" # Passive ports
+        ports:
+            - "21:21" # FTP Control Port
+            - "21000-21010:21000-21010" # Passive ports
         environment:
             - ADDRESS=ftp.${STACK_HOST}
             - USERS=${FTP_USERS} # Format (more users with spaces): name1|password1[|folder1][|uid1]
