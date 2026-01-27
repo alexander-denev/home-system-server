@@ -113,7 +113,7 @@ services:
         volumes:
             - yacht:/config
             - /var/run/docker.sock:/var/run/docker.sock
-         
+
     ftp:
         image: delfer/alpine-ftp-server
         restart: unless-stopped
@@ -122,6 +122,9 @@ services:
             - "21000-21010:21000-21010" # Passive ports
         environment:
             - ADDRESS=ftp.${STACK_HOST}
-            - USERS=${FTP_USERS} # Format (more users with spaces): name1|password1[|folder1][|uid1]
+            - USERS=admin|${FTP_PASSWORD}|/files
+            - TLS_CERT="/letsencrypt/live/npm-${FTP_CERT_ID}/fullchain.pem"
+            - TLS_KEY="/letsencrypt/live/npm-${FTP_CERT_ID}/privkey.pem"
         volumes:
-          - ${BIGFILES_MOUNTPOINT}/files:/files
+            - ${BIGFILES_MOUNTPOINT}/files:/files
+            - proxyman_letsencrypt:/letsencrypt
