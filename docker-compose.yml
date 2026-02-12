@@ -144,7 +144,8 @@ services:
     filebrowserq:
         image: gtstef/filebrowser
         configs:
-            - filebrowserq_config
+            - source: filebrowserq_config
+              target: /config/filebrowserq.yml
         volumes:
             - filebrowserq_db:/database
             - ${BIGFILES_MOUNTPOINT}/files:/srv
@@ -153,8 +154,8 @@ services:
         #     - 80:80 # Web interface
         restart: unless-stopped
         environment:
-            - FILEBROWSER_CONFIG=/filebrowserq_config
-        user: filebrowser
+            - FILEBROWSER_CONFIG=/config/filebrowserq.yml
+        user: 1000:1000
 
     onlyoffice:
         image: onlyoffice/documentserver:latest
