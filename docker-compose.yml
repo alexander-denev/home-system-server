@@ -85,6 +85,8 @@ services:
             retries: 3
             start_period: 5m
             start_interval: 5s
+        environment:
+            - TZ=${TZ} # Timezone
 
     wireguard:
         image: ghcr.io/wg-easy/wg-easy:latest
@@ -101,6 +103,7 @@ services:
             - net.ipv4.ip_forward=1
             - net.ipv4.conf.all.src_valid_mark=1
         environment:
+            - TZ=${TZ} # Timezone
             - LANG=en
             - WG_HOST=vpn.${STACK_HOST}
 
@@ -112,7 +115,7 @@ services:
         volumes:
             - n8n_data:/home/node/.n8n
         environment:
-            - TZ=${TZ} # System timezone
+            - TZ=${TZ} # Timezone
             - GENERIC_TIMEZONE=${TZ} # Timezone for nodes like Schedule
             - N8N_PERSONALIZATION_ENABLED=false
             - N8N_HOST=n8n.${STACK_HOST}
@@ -133,6 +136,7 @@ services:
         #     - 80:80 # Web interface
         restart: unless-stopped
         environment:
+            - TZ=${TZ} # Timezone
             - FILEBROWSER_CONFIG=/config/filebrowserq.yml
         user: 1000:1000
 
@@ -142,6 +146,7 @@ services:
         # ports:
         #     - "8081:8081" # Web Interface
         environment:
+            - TZ=${TZ} # Timezone
             - JWT_SECRET=${FILEBROWSER_ONLYOFFICE_SECRET}
         restart: unless-stopped
 
@@ -153,3 +158,5 @@ services:
         volumes:
             - yacht:/config
             - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+            - TZ=${TZ} # Timezone
