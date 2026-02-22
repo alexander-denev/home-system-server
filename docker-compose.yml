@@ -150,14 +150,3 @@ services:
             - TZ=${TZ} # Timezone
             - JWT_SECRET=${FILEBROWSER_ONLYOFFICE_SECRET}
         restart: unless-stopped
-
-    yacht:
-        image: selfhostedpro/yacht
-        restart: unless-stopped
-        # ports:
-        #     - "8000:8000" # Web Interface
-        volumes:
-            - yacht:/config
-            - /var/run/docker.sock:/var/run/docker.sock
-        environment:
-            - TZ=${TZ} # Timezone
