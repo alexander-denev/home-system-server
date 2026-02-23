@@ -100,6 +100,16 @@ services:
             - JWT_SECRET=${FILEBROWSER_ONLYOFFICE_SECRET}
         restart: unless-stopped
 
+    authelia:
+        image: "authelia/authelia"
+        restart: "unless-stopped"
+        volumes:
+            - authelia_config:/config"
+        ports:
+          - "9091:9091" # Web Interface
+        environment:
+            TZ: ${TZ} # Timezone
+
 configs:
     filebrowserq_config:
         content: |
@@ -152,3 +162,5 @@ configs:
                     viewOnly: false
                     secret: ${FILEBROWSER_ONLYOFFICE_SECRET}
 
+    authelia_config:
+        content: |
