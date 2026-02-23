@@ -139,7 +139,6 @@ services:
         environment:
             - TZ=${TZ} # Timezone
             - FILEBROWSER_CONFIG=/config/filebrowserq.yml
-        user: 1000:1000
 
     onlyoffice:
         image: onlyoffice/documentserver:latest
