@@ -10,7 +10,7 @@ volumes:
     wireguard_data:
     n8n_data:
     filebrowserq_db:
-    yacht:
+    
 
 configs:
     filebrowserq_config:
