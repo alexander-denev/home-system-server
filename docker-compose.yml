@@ -11,59 +11,6 @@ volumes:
     n8n_data:
     filebrowserq_db:
     
-
-configs:
-    filebrowserq_config:
-        content: |
-            auth:
-                tokenExpirationHours: 720 # time in hours each web UI session token is valid for. Default is 2 hours.
-
-            server:
-                database: "/database/filebrowserq.db"
-                cacheDir: "/cache"
-                sources:
-                    - path: "/srv"
-                      name: "Files"
-                      config:
-                          defaultEnabled: true # Give access to all users by default
-                          createUserDir: true # create a user directory for each user
-                          defaultUserScope: "/users" # default "/" should match folders under path
-                externalUrl: "https://files.${STACK_HOST}" # used by share links if set (eg. http://mydomain.com)
-                internalUrl: "http://filebrowserq:80" # used by integrations if set, this is the base domain that an integration service will use to communicate with filebrowser (eg. http://localhost:8080)
-
-            userDefaults:
-                showHidden: true # show hidden files in the UI. On windows this includes files starting with a dot and windows hidden files
-                dateFormat: true # when false, the date is relative, when true, the date is an exact timestamp
-                viewMode: "list" # view mode to use: eg. normal, list, grid, or compact
-                disablePreviewExt: ".pdf" # space separated list of file extensions to disable preview for
-                permissions:
-                    admin: false # allow admin access
-                    api: true # allow api access
-                    modify: true # allow modifying files
-                    share: true # allow sharing files
-                    delete: true # allow deleting files
-                    create: true # allow creating or uploading files
-                    download: true # allow downloading files
-                    realtime: false # allow realtime updates
-                preview:
-                    disableHideSidebar: false # disable the hide sidebar preview for previews and editors
-                    highQuality: true # generate high quality thumbnail preview images
-                    image: true # show thumbnail preview image for image files
-                    video: true # show thumbnail preview image for video files
-                    motionVideoPreview: true # show multiple frames for videos in thumbnail preview when hovering
-                    office: false # show thumbnail preview image for office files
-                    popup: true # show larger popup preview when hovering over thumbnail
-                    autoplayMedia: true # autoplay media files in preview
-                    defaultMediaPlayer: false # disable html5 media player and use the default media player
-                    folder: false # show thumbnail preview image for folder files
-
-            integrations:
-                office:
-                    url: "https://office.${STACK_HOST}" # Office URL with the external port which should be accesible from browser.
-                    internalUrl: "http://onlyoffice:80" # This is the container name for only office docker service + its internal port.
-                    viewOnly: false
-                    secret: ${FILEBROWSER_ONLYOFFICE_SECRET}
-
 services:
     proxyman:
         # Default login details:
@@ -152,3 +99,56 @@ services:
             - TZ=${TZ} # Timezone
             - JWT_SECRET=${FILEBROWSER_ONLYOFFICE_SECRET}
         restart: unless-stopped
+
+configs:
+    filebrowserq_config:
+        content: |
+            auth:
+                tokenExpirationHours: 720 # time in hours each web UI session token is valid for. Default is 2 hours.
+
+            server:
+                database: "/database/filebrowserq.db"
+                cacheDir: "/cache"
+                sources:
+                    - path: "/srv"
+                      name: "Files"
+                      config:
+                          defaultEnabled: true # Give access to all users by default
+                          createUserDir: true # create a user directory for each user
+                          defaultUserScope: "/users" # default "/" should match folders under path
+                externalUrl: "https://files.${STACK_HOST}" # used by share links if set (eg. http://mydomain.com)
+                internalUrl: "http://filebrowserq:80" # used by integrations if set, this is the base domain that an integration service will use to communicate with filebrowser (eg. http://localhost:8080)
+
+            userDefaults:
+                showHidden: true # show hidden files in the UI. On windows this includes files starting with a dot and windows hidden files
+                dateFormat: true # when false, the date is relative, when true, the date is an exact timestamp
+                viewMode: "list" # view mode to use: eg. normal, list, grid, or compact
+                disablePreviewExt: ".pdf" # space separated list of file extensions to disable preview for
+                permissions:
+                    admin: false # allow admin access
+                    api: true # allow api access
+                    modify: true # allow modifying files
+                    share: true # allow sharing files
+                    delete: true # allow deleting files
+                    create: true # allow creating or uploading files
+                    download: true # allow downloading files
+                    realtime: false # allow realtime updates
+                preview:
+                    disableHideSidebar: false # disable the hide sidebar preview for previews and editors
+                    highQuality: true # generate high quality thumbnail preview images
+                    image: true # show thumbnail preview image for image files
+                    video: true # show thumbnail preview image for video files
+                    motionVideoPreview: true # show multiple frames for videos in thumbnail preview when hovering
+                    office: false # show thumbnail preview image for office files
+                    popup: true # show larger popup preview when hovering over thumbnail
+                    autoplayMedia: true # autoplay media files in preview
+                    defaultMediaPlayer: false # disable html5 media player and use the default media player
+                    folder: false # show thumbnail preview image for folder files
+
+            integrations:
+                office:
+                    url: "https://office.${STACK_HOST}" # Office URL with the external port which should be accesible from browser.
+                    internalUrl: "http://onlyoffice:80" # This is the container name for only office docker service + its internal port.
+                    viewOnly: false
+                    secret: ${FILEBROWSER_ONLYOFFICE_SECRET}
+
