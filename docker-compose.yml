@@ -125,6 +125,9 @@ services:
             - NODES_EXCLUDE="[]"
 
     filebrowserq:
+        # Default login details:
+        # Email:    admin
+        # Password: admin
         image: gtstef/filebrowser
         configs:
             - source: filebrowserq_config
