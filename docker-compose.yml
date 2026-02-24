@@ -151,5 +151,3 @@ configs:
                     internalUrl: "http://onlyoffice:80" # This is the container name for only office docker service + its internal port.
                     viewOnly: false
                     secret: ${FILEBROWSER_ONLYOFFICE_SECRET}
-
-
