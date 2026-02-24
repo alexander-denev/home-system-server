@@ -94,7 +94,6 @@ services:
 
     onlyoffice:
         image: onlyoffice/documentserver:latest
-        container_name: onlyoffice
         # ports:
         #     - "8081:8081" # Web Interface
         environment:
