@@ -84,7 +84,7 @@ services:
         volumes:
             - ${BIGFILES_MOUNTPOINT}/files/db:/database
             - ${BIGFILES_MOUNTPOINT}/files/users:/srv
-            - ${BIGFILES_MOUNTPOINT}/cache:/cache
+            - ${BIGFILES_MOUNTPOINT}/files/cache:/cache
         # ports:
         #     - 80:80 # Web interface
         restart: unless-stopped
