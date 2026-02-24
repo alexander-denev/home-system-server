@@ -10,7 +10,9 @@ volumes:
     wireguard_data:
     n8n_data:
     filebrowserq_db:
-    
+    immich_config:
+    immich_db:
+
 services:
     proxyman:
         # Default login details:
@@ -80,8 +82,8 @@ services:
             - source: filebrowserq_config
               target: /config/filebrowserq.yml
         volumes:
-            - filebrowserq_db:/database
-            - ${BIGFILES_MOUNTPOINT}/files:/srv
+            - ${BIGFILES_MOUNTPOINT}/files/db:/database
+            - ${BIGFILES_MOUNTPOINT}/files/users:/srv
             - ${BIGFILES_MOUNTPOINT}/cache:/cache
         # ports:
         #     - 80:80 # Web interface
@@ -100,6 +102,51 @@ services:
             - JWT_SECRET=${FILEBROWSER_ONLYOFFICE_SECRET}
         restart: unless-stopped
 
+    immich:
+        # Prefered storage template:
+        # {{y}}/{{#if album}}{{album}}{{else}}Other{{/if}}/{{filename}}
+        image: ghcr.io/imagegenius/immich:latest
+        environment:
+            - PUID=0
+            - PGID=0
+            - TZ=${TZ} # Timezone
+            - DB_HOSTNAME=immich-db
+            - DB_USERNAME=postgres
+            - DB_PASSWORD=postgres
+            - DB_DATABASE_NAME=immich
+            - REDIS_HOSTNAME=localhost
+            # - DB_PORT=5432 #optional
+            # - REDIS_PORT=6379 #optional
+            # - REDIS_PASSWORD= #optional
+            # - SERVER_HOST=0.0.0.0 #optional
+            # - SERVER_PORT=8080 #optional
+            # - MACHINE_LEARNING_HOST=0.0.0.0 #optional
+            # - MACHINE_LEARNING_PORT=3003 #optional
+            # - MACHINE_LEARNING_WORKERS=0 #optional
+            # - MACHINE_LEARNING_WORKER_TIMEOUT=120 #optional
+            - DOCKER_MODS=imagegenius/mods:universal-redis
+        volumes:
+            - ${BIGFILES_MOUNTPOINT}/pics/etc:/config # Machine learning files
+            - ${BIGFILES_MOUNTPOINT}/pics/files:/photos # For photos storage
+            - ${BIGFILES_MOUNTPOINT}/files/users:/libraries # For external storage (filebrowserq)
+        # ports:
+        #     - 8080:8080 # Web Interface
+        restart: unless-stopped
+        depends_on:
+            - immich-db
+
+    immich-db:
+        image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
+        # ports:
+        #     - 5432:5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: immich
+            # DB_STORAGE_TYPE: 'HDD' # Uncomment if your database isn't stored on SSDs
+        volumes:
+            - ${BIGFILES_MOUNTPOINT}/pics/db:/var/lib/postgresql/data
+
 configs:
     filebrowserq_config:
         content: |
@@ -115,7 +162,7 @@ configs:
                       config:
                           defaultEnabled: true # Give access to all users by default
                           createUserDir: true # create a user directory for each user
-                          defaultUserScope: "/users" # default "/" should match folders under path
+                          defaultUserScope: "/" # default "/" should match folders under path
                 externalUrl: "https://files.${STACK_HOST}" # used by share links if set (eg. http://mydomain.com)
                 internalUrl: "http://filebrowserq:80" # used by integrations if set, this is the base domain that an integration service will use to communicate with filebrowser (eg. http://localhost:8080)
 
