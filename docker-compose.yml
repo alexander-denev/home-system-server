@@ -102,49 +102,47 @@ services:
         restart: unless-stopped
 
     immich:
-        # Prefered storage template:
-        # {{y}}/{{#if album}}{{album}}{{else}}Other{{/if}}/{{filename}}
-        image: ghcr.io/imagegenius/immich:latest
+        image: ghcr.io/immich-app/immich-server:release
+        configs:
+            - source: immich_config
+              target: /config/immich.yml
+        volumes:
+            - ${BIGFILES_MOUNTPOINT}/pics/data:/data
+            - ${BIGFILES_MOUNTPOINT}/files/users:/external
+            - /etc/localtime:/etc/localtime:ro
         environment:
-            - PUID=0
-            - PGID=0
             - TZ=${TZ} # Timezone
             - DB_HOSTNAME=immich-db
             - DB_USERNAME=postgres
             - DB_PASSWORD=postgres
             - DB_DATABASE_NAME=immich
-            - REDIS_HOSTNAME=localhost
-            # - DB_PORT=5432 #optional
-            # - REDIS_PORT=6379 #optional
-            # - REDIS_PASSWORD= #optional
-            # - SERVER_HOST=0.0.0.0 #optional
-            # - SERVER_PORT=8080 #optional
-            # - MACHINE_LEARNING_HOST=0.0.0.0 #optional
-            # - MACHINE_LEARNING_PORT=3003 #optional
-            # - MACHINE_LEARNING_WORKERS=0 #optional
-            # - MACHINE_LEARNING_WORKER_TIMEOUT=120 #optional
-            - DOCKER_MODS=imagegenius/mods:universal-redis
-        volumes:
-            - ${BIGFILES_MOUNTPOINT}/pics/etc:/config # Machine learning files
-            - ${BIGFILES_MOUNTPOINT}/pics/files:/photos # For photos storage
-            - ${BIGFILES_MOUNTPOINT}/files/users:/libraries # For external storage (filebrowserq)
-        # ports:
-        #     - 8080:8080 # Web Interface
-        restart: unless-stopped
+            - REDIS_HOSTNAME=immich-redis
+            - IMMICH_CONFIG_FILE=/config/immich.yml
+            # ports:
+            #     - "2283:2283" # Web Interface
         depends_on:
+            - immich-redis
             - immich-db
+        restart: unless-stopped
 
     immich-db:
-        image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
-        # ports:
-        #     - 5432:5432
+        image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
         environment:
-            POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
+            POSTGRES_USER: postgres
             POSTGRES_DB: immich
+            POSTGRES_INITDB_ARGS: "--data-checksums"
             # DB_STORAGE_TYPE: 'HDD' # Uncomment if your database isn't stored on SSDs
         volumes:
             - ${BIGFILES_MOUNTPOINT}/pics/db:/var/lib/postgresql/data
+        shm_size: 128mb
+        restart: unless-stopped
+
+    immich-redis:
+        image: docker.io/valkey/valkey:9@sha256:546304417feac0874c3dd576e0952c6bb8f06bb4093ea0c9ca303c73cf458f63
+        healthcheck:
+            test: redis-cli ping || exit 1
+        restart: unless-stopped
 
 configs:
     filebrowserq_config:
@@ -197,3 +195,19 @@ configs:
                     internalUrl: "http://onlyoffice:80" # This is the container name for only office docker service + its internal port.
                     viewOnly: false
                     secret: ${FILEBROWSER_ONLYOFFICE_SECRET}
+
+    immich_config:
+        content: |
+            storageTemplate:
+                enabled: true
+                hashVerificationEnabled: true
+                template: "{{y}}/{{#if album}}{{album}}{{else}}Other{{/if}}/{{filename}}"
+            library:
+                watch:
+                    enabled: true
+            machineLearning:
+                enabled: false
+            map:
+                enabled: false
+            reverseGeocoding:
+                enabled: false
