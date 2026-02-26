@@ -153,6 +153,7 @@ configs:
             server:
                 database: "/database/filebrowserq.db"
                 cacheDir: "/cache"
+                cacheDirCleanup: true
                 sources:
                     - path: "/srv"
                       name: "Files"
