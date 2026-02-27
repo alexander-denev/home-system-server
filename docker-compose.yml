@@ -10,6 +10,8 @@ volumes:
     wireguard_data:
     n8n_data:
     filebrowserq_db:
+    immich_config:
+    immich_db:
 
 services:
     proxyman:
@@ -32,9 +34,11 @@ services:
             retries: 3
             start_period: 5m
             start_interval: 5s
+        environment:
+            - TZ=${TZ} # Timezone
 
     wireguard:
-        image: ghcr.io/wg-easy/wg-easy
+        image: ghcr.io/wg-easy/wg-easy:latest
         volumes:
             - wireguard_data:/etc/wireguard
         ports:
@@ -44,35 +48,13 @@ services:
         cap_add:
             - NET_ADMIN
             - SYS_MODULE
-            # - NET_RAW # ⚠️ Uncomment if using Podman
         sysctls:
             - net.ipv4.ip_forward=1
             - net.ipv4.conf.all.src_valid_mark=1
         environment:
-            # Change Language:
-            # (Supports: en, ua, ru, tr, no, pl, fr, de, ca, es, ko, vi, nl, is, pt, chs, cht, it, th, hi)
+            - TZ=${TZ} # Timezone
             - LANG=en
-            # ⚠️ Required:
-            # Change this to your host's public address
             - WG_HOST=vpn.${STACK_HOST}
-
-            # Optional:
-            # - PASSWORD=foobar123 (deprecated, see readme)
-            # - PASSWORD_HASH=$$2y$$10$$hBCoykrB95WSzuV4fafBzOHWKu9sbyVa34GJr8VV5R/pIelfEMYyG (needs double $$, hash of 'foobar123'; see "How_to_generate_an_bcrypt_hash.md" for generate the hash)
-            # - PORT=51821
-            # - WG_PORT=51820
-            # - WG_CONFIG_PORT=92820
-            # - WG_DEFAULT_ADDRESS=10.8.0.x
-            # - WG_DEFAULT_DNS=192.168.0.2
-            # - WG_MTU=1420
-            # - WG_ALLOWED_IPS=192.168.15.0/24, 10.0.1.0/24
-            # - WG_PERSISTENT_KEEPALIVE=25
-            # - WG_PRE_UP=echo "Pre Up" > /etc/wireguard/pre-up.txt
-            # - WG_POST_UP=echo "Post Up" > /etc/wireguard/post-up.txt
-            # - WG_PRE_DOWN=echo "Pre Down" > /etc/wireguard/pre-down.txt
-            # - WG_POST_DOWN=echo "Post Down" > /etc/wireguard/post-down.txt
-            # - UI_TRAFFIC_STATS=true
-            # - UI_CHART_TYPE=0 # (0 Charts disabled, 1 # Line chart, 2 # Area chart, 3 # Bar chart)
 
     n8n:
         image: n8nio/n8n:latest
@@ -82,24 +64,151 @@ services:
         volumes:
             - n8n_data:/home/node/.n8n
         environment:
-            - TZ=${TZ} # System timezone
+            - TZ=${TZ} # Timezone
             - GENERIC_TIMEZONE=${TZ} # Timezone for nodes like Schedule
             - N8N_PERSONALIZATION_ENABLED=false
             - N8N_HOST=n8n.${STACK_HOST}
             - N8N_PORT=5678
             - N8N_EDITOR_BASE_URL=https://n8n.${STACK_HOST}
             - WEBHOOK_URL=https://n8n.${STACK_HOST}
+            - NODES_EXCLUDE="[]"
 
     filebrowserq:
-        image: gtstef/filebrowser
+        # Default login details:
+        # Email:    admin
+        # Password: admin
+        image: gtstef/filebrowser:latest
+        configs:
+            - source: filebrowserq_config
+              target: /config/filebrowserq.yml
         volumes:
-            - ./filebrowserq.yml:/config/filebrowserq.yml
-            - filebrowserq_db:/database
-            - ${BIGFILES_MOUNTPOINT}/files:/srv
-            - ${BIGFILES_MOUNTPOINT}/cache:/cache
+            - ${BIGFILES_MOUNTPOINT}/files/db:/database
+            - ${BIGFILES_MOUNTPOINT}/files/users:/srv
+            - ${BIGFILES_MOUNTPOINT}/files/cache:/cache
         # ports:
         #     - 80:80 # Web interface
         restart: unless-stopped
         environment:
+            - TZ=${TZ} # Timezone
             - FILEBROWSER_CONFIG=/config/filebrowserq.yml
-        user: filebrowser
+
+    onlyoffice:
+        image: onlyoffice/documentserver:latest
+        # ports:
+        #     - "8081:8081" # Web Interface
+        environment:
+            - TZ=${TZ} # Timezone
+            - JWT_SECRET=${FILEBROWSER_ONLYOFFICE_SECRET}
+        restart: unless-stopped
+
+    immich:
+        image: ghcr.io/immich-app/immich-server:release
+        configs:
+            - source: immich_config
+              target: /config/immich.yml
+        volumes:
+            - ${BIGFILES_MOUNTPOINT}/pics/data:/data
+            - ${BIGFILES_MOUNTPOINT}/files/users:/external
+            - /etc/localtime:/etc/localtime:ro
+        environment:
+            - TZ=${TZ} # Timezone
+            - DB_HOSTNAME=immich-db
+            - DB_USERNAME=postgres
+            - DB_PASSWORD=postgres
+            - DB_DATABASE_NAME=immich
+            - REDIS_HOSTNAME=immich-redis
+            - IMMICH_CONFIG_FILE=/config/immich.yml
+            # ports:
+            #     - "2283:2283" # Web Interface
+        depends_on:
+            - immich-redis
+            - immich-db
+        restart: unless-stopped
+
+    immich-db:
+        image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
+        environment:
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_DB: immich
+            POSTGRES_INITDB_ARGS: "--data-checksums"
+            # DB_STORAGE_TYPE: 'HDD' # Uncomment if your database isn't stored on SSDs
+        volumes:
+            - ${BIGFILES_MOUNTPOINT}/pics/db:/var/lib/postgresql/data
+        shm_size: 128mb
+        restart: unless-stopped
+
+    immich-redis:
+        image: docker.io/valkey/valkey:9@sha256:546304417feac0874c3dd576e0952c6bb8f06bb4093ea0c9ca303c73cf458f63
+        healthcheck:
+            test: redis-cli ping || exit 1
+        restart: unless-stopped
+
+configs:
+    filebrowserq_config:
+        content: |
+            auth:
+                tokenExpirationHours: 720 # time in hours each web UI session token is valid for. Default is 2 hours.
+
+            server:
+                database: "/database/filebrowserq.db"
+                cacheDir: "/cache"
+                cacheDirCleanup: true
+                sources:
+                    - path: "/srv"
+                      name: "Files"
+                      config:
+                          defaultEnabled: true # Give access to all users by default
+                          createUserDir: true # create a user directory for each user
+                          defaultUserScope: "/" # default "/" should match folders under path
+                externalUrl: "https://files.${STACK_HOST}" # used by share links if set (eg. http://mydomain.com)
+                internalUrl: "http://filebrowserq:80" # used by integrations if set, this is the base domain that an integration service will use to communicate with filebrowser (eg. http://localhost:8080)
+
+            userDefaults:
+                showHidden: true # show hidden files in the UI. On windows this includes files starting with a dot and windows hidden files
+                dateFormat: true # when false, the date is relative, when true, the date is an exact timestamp
+                viewMode: "list" # view mode to use: eg. normal, list, grid, or compact
+                disablePreviewExt: ".pdf" # space separated list of file extensions to disable preview for
+                permissions:
+                    admin: false # allow admin access
+                    api: true # allow api access
+                    modify: true # allow modifying files
+                    share: true # allow sharing files
+                    delete: true # allow deleting files
+                    create: true # allow creating or uploading files
+                    download: true # allow downloading files
+                    realtime: false # allow realtime updates
+                preview:
+                    disableHideSidebar: false # disable the hide sidebar preview for previews and editors
+                    highQuality: true # generate high quality thumbnail preview images
+                    image: true # show thumbnail preview image for image files
+                    video: true # show thumbnail preview image for video files
+                    motionVideoPreview: true # show multiple frames for videos in thumbnail preview when hovering
+                    office: false # show thumbnail preview image for office files
+                    popup: true # show larger popup preview when hovering over thumbnail
+                    autoplayMedia: true # autoplay media files in preview
+                    defaultMediaPlayer: false # disable html5 media player and use the default media player
+                    folder: false # show thumbnail preview image for folder files
+
+            integrations:
+                office:
+                    url: "https://office.${STACK_HOST}" # Office URL with the external port which should be accesible from browser.
+                    internalUrl: "http://onlyoffice:80" # This is the container name for only office docker service + its internal port.
+                    viewOnly: false
+                    secret: ${FILEBROWSER_ONLYOFFICE_SECRET}
+
+    immich_config:
+        content: |
+            storageTemplate:
+                enabled: true
+                hashVerificationEnabled: true
+                template: "{{y}}/{{#if album}}{{album}}{{else}}Other{{/if}}/{{filename}}"
+            library:
+                watch:
+                    enabled: true
+            machineLearning:
+                enabled: false
+            map:
+                enabled: false
+            reverseGeocoding:
+                enabled: false
