@@ -145,12 +145,16 @@ services:
     pocket-id:
         image: ghcr.io/pocket-id/pocket-id:latest
         restart: unless-stopped
-        environment:
-            - ANALYTICS_DISABLED=true
         # ports:
         #     - 1411:1411 # Web Interface
         volumes:
             - pocket-id_data:/app/data
+        environment:
+            - TZ=${TZ} # Timezone
+            - ANALYTICS_DISABLED=true
+            - APP_URL=https://auth.${STACK_HOST}
+            - ENCRYPTION_KEY=${POCKET_ID_KEY}
+            - TRUST_PROXY=true
 
 configs:
     filebrowserq_config:
