@@ -15,9 +15,6 @@ volumes:
 
 services:
     proxyman:
-        # Default login details:
-        # Email:    admin@example.com
-        # Password: changeme
         image: jc21/nginx-proxy-manager:latest
         ports:
             - "80:80" # Public HTTP Port
