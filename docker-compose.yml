@@ -12,7 +12,7 @@ volumes:
     filebrowserq_db:
     immich_config:
     immich_db:
-    pocketid_data:
+    pocket-id_data:
 
 services:
     proxyman:
@@ -142,7 +142,7 @@ services:
             test: redis-cli ping || exit 1
         restart: unless-stopped
 
-    pocketid:
+    pocket-id:
         image: ghcr.io/pocket-id/pocket-id:latest
         restart: unless-stopped
         environment:
@@ -150,7 +150,7 @@ services:
         # ports:
         #     - 1411:1411 # Web Interface
         volumes:
-            - pocketid_data:/app/data
+            - pocket-id_data:/app/data
 
 configs:
     filebrowserq_config:
