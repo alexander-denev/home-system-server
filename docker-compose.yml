@@ -141,6 +141,15 @@ services:
             test: redis-cli ping || exit 1
         restart: unless-stopped
 
+    pocket-id:
+        image: ghcr.io/pocket-id/pocket-id:v2
+        restart: unless-stopped
+        env_file: .env
+        ports:
+            - 1411:1411
+        volumes:
+            - "./data:/app/data"
+
 configs:
     filebrowserq_config:
         content: |
