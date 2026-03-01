@@ -24,13 +24,6 @@ services:
         volumes:
             - proxyman_data:/data
             - proxyman_letsencrypt:/etc/letsencrypt
-        healthcheck:
-            test: ["CMD", "/usr/bin/check-health"]
-            interval: 10s
-            timeout: 5s
-            retries: 3
-            start_period: 5m
-            start_interval: 5s
         environment:
             - TZ=${TZ} # Timezone
 
@@ -118,8 +111,11 @@ services:
             # ports:
             #     - "2283:2283" # Web Interface
         depends_on:
-            - immich-redis
-            - immich-db
+            immich-redis:
+                condition: service_healthy
+            immich-db:
+                condition: service_healthy
+                restart: true
         restart: unless-stopped
 
     immich-db:
