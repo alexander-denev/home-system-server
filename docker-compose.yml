@@ -142,6 +142,9 @@ configs:
         content: |
             auth:
                 tokenExpirationHours: 720 # time in hours each web UI session token is valid for. Default is 2 hours.
+            
+            frontend:
+                name: ${STACK_BRANDNAME} Files
 
             server:
                 database: "/database/filebrowserq.db"
