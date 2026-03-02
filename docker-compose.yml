@@ -82,15 +82,6 @@ services:
             - TZ=${TZ} # Timezone
             - FILEBROWSER_CONFIG=/config/filebrowserq.yml
 
-    onlyoffice:
-        image: onlyoffice/documentserver:latest
-        # ports:
-        #     - "8081:8081" # Web Interface
-        environment:
-            - TZ=${TZ} # Timezone
-            - JWT_SECRET=${FILEBROWSER_ONLYOFFICE_SECRET}
-        restart: unless-stopped
-
     immich:
         image: ghcr.io/immich-app/immich-server:release
         configs:
@@ -142,7 +133,7 @@ configs:
         content: |
             auth:
                 tokenExpirationHours: 720 # time in hours each web UI session token is valid for. Default is 2 hours.
-            
+
             frontend:
                 name: ${STACK_BRANDNAME} Files
 
@@ -185,13 +176,6 @@ configs:
                     autoplayMedia: true # autoplay media files in preview
                     defaultMediaPlayer: false # disable html5 media player and use the default media player
                     folder: false # show thumbnail preview image for folder files
-
-            integrations:
-                office:
-                    url: "https://office.${STACK_HOST}" # Office URL with the external port which should be accesible from browser.
-                    internalUrl: "http://onlyoffice:80" # This is the container name for only office docker service + its internal port.
-                    viewOnly: false
-                    secret: ${FILEBROWSER_ONLYOFFICE_SECRET}
 
     immich_config:
         content: |
