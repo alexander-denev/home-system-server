@@ -142,6 +142,7 @@ services:
             - APP_URL=https://auth.${STACK_HOST}
             - ENCRYPTION_KEY=${POCKET_ID_KEY}
             - TRUST_PROXY=true
+            - APP_NAME=${STACK_BRANDNAME}
 
 configs:
     filebrowserq_config:
