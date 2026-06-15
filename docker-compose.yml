@@ -25,13 +25,6 @@ services:
         volumes:
             - proxyman_data:/data
             - proxyman_letsencrypt:/etc/letsencrypt
-        healthcheck:
-            test: ["CMD", "/usr/bin/check-health"]
-            interval: 10s
-            timeout: 5s
-            retries: 3
-            start_period: 5m
-            start_interval: 5s
         environment:
             - TZ=${TZ} # Timezone
 
@@ -90,15 +83,6 @@ services:
             - TZ=${TZ} # Timezone
             - FILEBROWSER_CONFIG=/config/filebrowserq.yml
 
-    onlyoffice:
-        image: onlyoffice/documentserver:latest
-        # ports:
-        #     - "8081:8081" # Web Interface
-        environment:
-            - TZ=${TZ} # Timezone
-            - JWT_SECRET=${FILEBROWSER_ONLYOFFICE_SECRET}
-        restart: unless-stopped
-
     immich:
         image: ghcr.io/immich-app/immich-server:release
         configs:
@@ -119,8 +103,11 @@ services:
             # ports:
             #     - "2283:2283" # Web Interface
         depends_on:
-            - immich-redis
-            - immich-db
+            immich-redis:
+                condition: service_healthy
+            immich-db:
+                condition: service_healthy
+                restart: true
         restart: unless-stopped
 
     immich-db:
@@ -163,6 +150,9 @@ configs:
             auth:
                 tokenExpirationHours: 720 # time in hours each web UI session token is valid for. Default is 2 hours.
 
+            frontend:
+                name: ${STACK_BRANDNAME} Files
+
             server:
                 database: "/database/filebrowserq.db"
                 cacheDir: "/cache"
@@ -202,13 +192,6 @@ configs:
                     autoplayMedia: true # autoplay media files in preview
                     defaultMediaPlayer: false # disable html5 media player and use the default media player
                     folder: false # show thumbnail preview image for folder files
-
-            integrations:
-                office:
-                    url: "https://office.${STACK_HOST}" # Office URL with the external port which should be accesible from browser.
-                    internalUrl: "http://onlyoffice:80" # This is the container name for only office docker service + its internal port.
-                    viewOnly: false
-                    secret: ${FILEBROWSER_ONLYOFFICE_SECRET}
 
     immich_config:
         content: |
