@@ -54,14 +54,6 @@ services:
             - WEBHOOK_URL=https://n8n.${STACK_HOST}
             - NODES_EXCLUDE="[]"
 
-    ollama:
-        image: ollama/ollama:latest
-        restart: unless-stopped
-        # ports:
-        #     - 11434:11434 
-        environment:
-            - TZ=${TZ} # Timezone
-
     filebrowserq:
         # Default login details:
         # Email:    admin
