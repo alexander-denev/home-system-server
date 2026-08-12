@@ -51,14 +51,15 @@ services:
             - N8N_HOST=n8n.${STACK_HOST}
             - N8N_PORT=5678
             - N8N_EDITOR_BASE_URL=https://n8n.${STACK_HOST}
-            - WEBHOOK_URL=https://n8n.${STACK_HOST}
+            - N8N_WEBHOOK_URL=https://n8n.${STACK_HOST}
             - NODES_EXCLUDE="[]"
+            - N8N_UNVERIFIED_PACKAGES_ENABLED=true
 
     ollama:
         image: ollama/ollama:latest
         restart: unless-stopped
         # ports:
-        #     - 11434:11434 
+        #     - 11434:11434
         environment:
             - TZ=${TZ} # Timezone
 
