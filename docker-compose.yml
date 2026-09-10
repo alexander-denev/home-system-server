@@ -136,6 +136,7 @@ configs:
 
             frontend:
                 name: ${STACK_BRANDNAME} Files
+                disablePWAInstall: true
 
             server:
                 database: "/database/filebrowserq.db"
